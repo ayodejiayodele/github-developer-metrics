@@ -2154,6 +2154,10 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -2683,14 +2687,16 @@
                 "    #\"Invoked Custom Function\" = Table.AddColumn(#\"Replaced Value\", \"commits\", each GetCommits(Text.Replace([repositories.commits_url],GitHubAPI,\"\"))),",
                 "    #\"Expanded commits\" = Table.ExpandTableColumn(#\"Invoked Custom Function\", \"commits\", {\"Column1\"}, {\"commits.Column1\"}),",
                 "    #\"Expanded commits.Column1\" = Table.ExpandListColumn(#\"Expanded commits\", \"commits.Column1\"),",
-                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded commits.Column1\",{{\"commits.Column1\", \"commits\"}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Expanded commits.Column1\", each [commits.Column1] <> null and [commits.Column1] <> \"\"),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"commits.Column1\", \"commits\"}}),",
                 "    #\"Expanded commits1\" = Table.ExpandRecordColumn(#\"Renamed Columns\", \"commits\", {\"sha\", \"node_id\", \"commit\", \"url\", \"html_url\", \"comments_url\", \"author\", \"committer\", \"parents\"}, {\"commits.sha\", \"commits.node_id\", \"commits.commit\", \"commits.url\", \"commits.html_url\", \"commits.comments_url\", \"commits.author\", \"commits.committer\", \"commits.parents\"}),",
                 "    #\"Expanded commits.commit\" = Table.ExpandRecordColumn(#\"Expanded commits1\", \"commits.commit\", {\"author\", \"committer\", \"message\", \"tree\", \"url\", \"comment_count\", \"verification\"}, {\"commits.commit.author\", \"commits.commit.committer\", \"commits.commit.message\", \"commits.commit.tree\", \"commits.commit.url\", \"commits.commit.comment_count\", \"commits.commit.verification\"}),",
                 "    #\"Expanded commits.author\" = Table.ExpandRecordColumn(#\"Expanded commits.commit\", \"commits.author\", {\"login\", \"id\", \"node_id\", \"avatar_url\", \"gravatar_id\", \"url\", \"html_url\", \"followers_url\", \"following_url\", \"gists_url\", \"starred_url\", \"subscriptions_url\", \"organizations_url\", \"repos_url\", \"events_url\", \"received_events_url\", \"type\", \"site_admin\"}, {\"commits.author.login\", \"commits.author.id\", \"commits.author.node_id\", \"commits.author.avatar_url\", \"commits.author.gravatar_id\", \"commits.author.url\", \"commits.author.html_url\", \"commits.author.followers_url\", \"commits.author.following_url\", \"commits.author.gists_url\", \"commits.author.starred_url\", \"commits.author.subscriptions_url\", \"commits.author.organizations_url\", \"commits.author.repos_url\", \"commits.author.events_url\", \"commits.author.received_events_url\", \"commits.author.type\", \"commits.author.site_admin\"}),",
                 "    #\"Expanded commits.commit.author\" = Table.ExpandRecordColumn(#\"Expanded commits.author\", \"commits.commit.author\", {\"name\", \"email\", \"date\"}, {\"commits.commit.author.name\", \"commits.commit.author.email\", \"commits.commit.author.date\"}),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Expanded commits.commit.author\",{{\"commits.commit.author.date\", type datetime}}),",
                 "    #\"Added Custom\" = Table.AddColumn(#\"Changed Type\", \"commits_date_only\", each [commits.commit.author.date]),",
-                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Added Custom\",{{\"commits_date_only\", type date}})",
+                "    #\"Filtered Rows1\" = Table.SelectRows(#\"Added Custom\", each [commits_date_only] <> null and [commits_date_only] <> \"\"),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Filtered Rows1\",{{\"commits_date_only\", type date}})",
                 "in",
                 "    #\"Changed Type1\""
               ],
@@ -2705,6 +2711,10 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -3332,17 +3342,20 @@
                 "    #\"Removed Other Columns\" = Table.SelectColumns(Source,{\"organization\", \"repositories.id\", \"repositories.url\"}),",
                 "    #\"Invoked Custom Function\" = Table.AddColumn(#\"Removed Other Columns\", \"workflowruns\", each GetWorkflowRuns(Text.Replace([repositories.url],GitHubAPI,\"\"))),",
                 "    #\"Expanded workflowruns\" = Table.ExpandTableColumn(#\"Invoked Custom Function\", \"workflowruns\", {\"Column1\"}, {\"workflowruns.Column1\"}),",
-                "    #\"Expanded workflowruns.Column1\" = Table.ExpandRecordColumn(#\"Expanded workflowruns\", \"workflowruns.Column1\", {\"total_count\", \"workflow_runs\"}, {\"total_count\", \"workflow_runs\"}),",
+                "    #\"Filtered Rows1\" = Table.SelectRows(#\"Expanded workflowruns\", each [workflowruns.Column1] <> null and [workflowruns.Column1] <> \"\"),",
+                "    #\"Expanded workflowruns.Column1\" = Table.ExpandRecordColumn(#\"Filtered Rows1\", \"workflowruns.Column1\", {\"total_count\", \"workflow_runs\"}, {\"total_count\", \"workflow_runs\"}),",
                 "    #\"Expanded workflow_runs\" = Table.ExpandListColumn(#\"Expanded workflowruns.Column1\", \"workflow_runs\"),",
-                "    #\"Expanded workflow_runs1\" = Table.ExpandRecordColumn(#\"Expanded workflow_runs\", \"workflow_runs\", {\"id\", \"name\", \"node_id\", \"head_branch\", \"head_sha\", \"path\", \"display_title\", \"run_number\", \"event\", \"status\", \"conclusion\", \"workflow_id\", \"check_suite_id\", \"check_suite_node_id\", \"url\", \"html_url\", \"pull_requests\", \"created_at\", \"updated_at\", \"actor\", \"run_attempt\", \"referenced_workflows\", \"run_started_at\", \"triggering_actor\", \"jobs_url\", \"logs_url\", \"check_suite_url\", \"artifacts_url\", \"cancel_url\", \"rerun_url\", \"previous_attempt_url\", \"workflow_url\", \"head_commit\", \"repository\", \"head_repository\"}, {\"id\", \"name\", \"node_id\", \"head_branch\", \"head_sha\", \"path\", \"display_title\", \"run_number\", \"event\", \"status\", \"conclusion\", \"workflow_id\", \"check_suite_id\", \"check_suite_node_id\", \"url\", \"html_url\", \"pull_requests\", \"created_at\", \"updated_at\", \"actor\", \"run_attempt\", \"referenced_workflows\", \"run_started_at\", \"triggering_actor\", \"jobs_url\", \"logs_url\", \"check_suite_url\", \"artifacts_url\", \"cancel_url\", \"rerun_url\", \"previous_attempt_url\", \"workflow_url\", \"head_commit\", \"repository\", \"head_repository\"}),",
-                "    #\"Filtered Rows\" = Table.SelectRows(#\"Expanded workflow_runs1\", each ([id] <> null)),",
-                "    #\"Expanded actor\" = Table.ExpandRecordColumn(#\"Filtered Rows\", \"actor\", {\"login\"}, {\"login\"}),",
+                "    #\"Filtered Rows2\" = Table.SelectRows(#\"Expanded workflow_runs\", each [workflow_runs] <> null and [workflow_runs] <> \"\"),",
+                "    #\"Expanded workflow_runs1\" = Table.ExpandRecordColumn(#\"Filtered Rows2\", \"workflow_runs\", {\"id\", \"name\", \"node_id\", \"head_branch\", \"head_sha\", \"path\", \"display_title\", \"run_number\", \"event\", \"status\", \"conclusion\", \"workflow_id\", \"check_suite_id\", \"check_suite_node_id\", \"url\", \"html_url\", \"pull_requests\", \"created_at\", \"updated_at\", \"actor\", \"run_attempt\", \"referenced_workflows\", \"run_started_at\", \"triggering_actor\", \"jobs_url\", \"logs_url\", \"check_suite_url\", \"artifacts_url\", \"cancel_url\", \"rerun_url\", \"previous_attempt_url\", \"workflow_url\", \"head_commit\", \"repository\", \"head_repository\"}, {\"id\", \"name\", \"node_id\", \"head_branch\", \"head_sha\", \"path\", \"display_title\", \"run_number\", \"event\", \"status\", \"conclusion\", \"workflow_id\", \"check_suite_id\", \"check_suite_node_id\", \"url\", \"html_url\", \"pull_requests\", \"created_at\", \"updated_at\", \"actor\", \"run_attempt\", \"referenced_workflows\", \"run_started_at\", \"triggering_actor\", \"jobs_url\", \"logs_url\", \"check_suite_url\", \"artifacts_url\", \"cancel_url\", \"rerun_url\", \"previous_attempt_url\", \"workflow_url\", \"head_commit\", \"repository\", \"head_repository\"}),",
+                "    #\"Expanded actor\" = Table.ExpandRecordColumn(#\"Expanded workflow_runs1\", \"actor\", {\"login\"}, {\"login\"}),",
                 "    #\"Expanded triggering_actor\" = Table.ExpandRecordColumn(#\"Expanded actor\", \"triggering_actor\", {\"login\"}, {\"login.1\"}),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Expanded triggering_actor\",{{\"created_at\", type datetime}, {\"updated_at\", type datetime}}),",
                 "    #\"Added Custom\" = Table.AddColumn(#\"Changed Type\", \"duration\", each [updated_at]-[created_at]),",
-                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Added Custom\",{{\"duration\", type duration}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Added Custom\", each [duration] <> null and [duration] <> \"\"),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Filtered Rows\",{{\"duration\", type duration}}),",
                 "    #\"Added Custom1\" = Table.AddColumn(#\"Changed Type1\", \"updated_at_date\", each Date.From([updated_at])),",
-                "    #\"Changed Type2\" = Table.TransformColumnTypes(#\"Added Custom1\",{{\"updated_at_date\", type date}})",
+                "    #\"Filtered Rows3\" = Table.SelectRows(#\"Added Custom1\", each [updated_at_date] <> null and [updated_at_date] <> \"\"),",
+                "    #\"Changed Type2\" = Table.TransformColumnTypes(#\"Filtered Rows3\",{{\"updated_at_date\", type date}})",
                 "in",
                 "    #\"Changed Type2\""
               ],
@@ -3357,6 +3370,10 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -3833,9 +3850,11 @@
                 "    #\"Replaced Value\" = Table.ReplaceValue(#\"Removed Other Columns\",\"{/number}\",\"\",Replacer.ReplaceText,{\"repositories.issues_url\"}),",
                 "    #\"Invoked Custom Function\" = Table.AddColumn(#\"Replaced Value\", \"issues\", each GetIssues(Text.Replace([repositories.issues_url],GitHubAPI,\"\"))),",
                 "    #\"Expanded issues\" = Table.ExpandTableColumn(#\"Invoked Custom Function\", \"issues\", {\"Column1\"}, {\"issues.Column1\"}),",
-                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded issues\",{{\"issues.Column1\", \"issues\"}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Expanded issues\", each [issues.Column1] <> null and [issues.Column1] <> \"\"),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"issues.Column1\", \"issues\"}}),",
                 "    #\"Expanded issues1\" = Table.ExpandListColumn(#\"Renamed Columns\", \"issues\"),",
-                "    #\"Expanded issues2\" = Table.ExpandRecordColumn(#\"Expanded issues1\", \"issues\", {\"url\", \"repository_url\", \"labels_url\", \"comments_url\", \"events_url\", \"html_url\", \"id\", \"node_id\", \"number\", \"title\", \"user\", \"labels\", \"state\", \"locked\", \"assignee\", \"assignees\", \"milestone\", \"comments\", \"created_at\", \"updated_at\", \"closed_at\", \"author_association\", \"active_lock_reason\", \"body\", \"reactions\", \"timeline_url\", \"performed_via_github_app\", \"state_reason\"}, {\"issues.url\", \"issues.repository_url\", \"issues.labels_url\", \"issues.comments_url\", \"issues.events_url\", \"issues.html_url\", \"issues.id\", \"issues.node_id\", \"issues.number\", \"issues.title\", \"issues.user\", \"issues.labels\", \"issues.state\", \"issues.locked\", \"issues.assignee\", \"issues.assignees\", \"issues.milestone\", \"issues.comments\", \"issues.created_at\", \"issues.updated_at\", \"issues.closed_at\", \"issues.author_association\", \"issues.active_lock_reason\", \"issues.body\", \"issues.reactions\", \"issues.timeline_url\", \"issues.performed_via_github_app\", \"issues.state_reason\"}),",
+                "    #\"Filtered Rows1\" = Table.SelectRows(#\"Expanded issues1\", each [issues] <> null and [issues] <> \"\"),",
+                "    #\"Expanded issues2\" = Table.ExpandRecordColumn(#\"Filtered Rows1\", \"issues\", {\"url\", \"repository_url\", \"labels_url\", \"comments_url\", \"events_url\", \"html_url\", \"id\", \"node_id\", \"number\", \"title\", \"user\", \"labels\", \"state\", \"locked\", \"assignee\", \"assignees\", \"milestone\", \"comments\", \"created_at\", \"updated_at\", \"closed_at\", \"author_association\", \"active_lock_reason\", \"body\", \"reactions\", \"timeline_url\", \"performed_via_github_app\", \"state_reason\"}, {\"issues.url\", \"issues.repository_url\", \"issues.labels_url\", \"issues.comments_url\", \"issues.events_url\", \"issues.html_url\", \"issues.id\", \"issues.node_id\", \"issues.number\", \"issues.title\", \"issues.user\", \"issues.labels\", \"issues.state\", \"issues.locked\", \"issues.assignee\", \"issues.assignees\", \"issues.milestone\", \"issues.comments\", \"issues.created_at\", \"issues.updated_at\", \"issues.closed_at\", \"issues.author_association\", \"issues.active_lock_reason\", \"issues.body\", \"issues.reactions\", \"issues.timeline_url\", \"issues.performed_via_github_app\", \"issues.state_reason\"}),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Expanded issues2\",{{\"issues.closed_at\", type datetime}, {\"issues.updated_at\", type datetime}, {\"issues.created_at\", type datetime}})",
                 "in",
                 "    #\"Changed Type\""
@@ -4454,6 +4473,10 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -5054,10 +5077,11 @@
                 "    #\"Removed Other Columns\" = Table.SelectColumns(Source,{\"organization\", \"repositories.id\", \"repositories.pulls_url\"}),",
                 "    #\"Replaced Value\" = Table.ReplaceValue(#\"Removed Other Columns\",\"{/number}\",\"\",Replacer.ReplaceText,{\"repositories.pulls_url\"}),",
                 "    #\"Invoked Custom Function\" = Table.AddColumn(#\"Replaced Value\", \"pull_request\", each GetPRs(Text.Replace([repositories.pulls_url],GitHubAPI,\"\"))),",
-                "    #\"Expanded issues\" = Table.ExpandTableColumn(#\"Invoked Custom Function\", \"pull_request\", {\"Column1\"}, {\"pull_request.Column1\"}),",
-                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded issues\",{{\"pull_request.Column1\", \"pull_request\"}}),",
-                "    #\"Expanded issues1\" = Table.ExpandListColumn(#\"Renamed Columns\", \"pull_request\"),",
-                "    #\"Expanded pull_requests\" = Table.ExpandRecordColumn(#\"Expanded issues1\", \"pull_request\", {\"url\", \"id\", \"node_id\", \"html_url\", \"diff_url\", \"patch_url\", \"issue_url\", \"number\", \"state\", \"locked\", \"title\", \"user\", \"body\", \"created_at\", \"updated_at\", \"closed_at\", \"merged_at\", \"merge_commit_sha\", \"assignee\", \"assignees\", \"requested_reviewers\", \"requested_teams\", \"labels\", \"milestone\", \"draft\", \"commits_url\", \"review_comments_url\", \"review_comment_url\", \"comments_url\", \"statuses_url\", \"head\", \"base\", \"_links\", \"author_association\", \"auto_merge\", \"active_lock_reason\"}, {\"pull_requests.url\", \"pull_requests.id\", \"pull_requests.node_id\", \"pull_requests.html_url\", \"pull_requests.diff_url\", \"pull_requests.patch_url\", \"pull_requests.issue_url\", \"pull_requests.number\", \"pull_requests.state\", \"pull_requests.locked\", \"pull_requests.title\", \"pull_requests.user\", \"pull_requests.body\", \"pull_requests.created_at\", \"pull_requests.updated_at\", \"pull_requests.closed_at\", \"pull_requests.merged_at\", \"pull_requests.merge_commit_sha\", \"pull_requests.assignee\", \"pull_requests.assignees\", \"pull_requests.requested_reviewers\", \"pull_requests.requested_teams\", \"pull_requests.labels\", \"pull_requests.milestone\", \"pull_requests.draft\", \"pull_requests.commits_url\", \"pull_requests.review_comments_url\", \"pull_requests.review_comment_url\", \"pull_requests.comments_url\", \"pull_requests.statuses_url\", \"pull_requests.head\", \"pull_requests.base\", \"pull_requests._links\", \"pull_requests.author_association\", \"pull_requests.auto_merge\", \"pull_requests.active_lock_reason\"}),",
+                "    #\"Expanded pull requests\" = Table.ExpandTableColumn(#\"Invoked Custom Function\", \"pull_request\", {\"Column1\"}, {\"pull_request.Column1\"}),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded pull requests\",{{\"pull_request.Column1\", \"pull_request\"}}),",
+                "    #\"Expanded prs\" = Table.ExpandListColumn(#\"Renamed Columns\", \"pull_request\"),",
+                "    #\"Filtered Rows1\" = Table.SelectRows(#\"Expanded prs\", each [pull_request] <> null and [pull_request] <> \"\"),",
+                "    #\"Expanded pull_requests\" = Table.ExpandRecordColumn(#\"Filtered Rows1\", \"pull_request\", {\"url\", \"id\", \"node_id\", \"html_url\", \"diff_url\", \"patch_url\", \"issue_url\", \"number\", \"state\", \"locked\", \"title\", \"user\", \"body\", \"created_at\", \"updated_at\", \"closed_at\", \"merged_at\", \"merge_commit_sha\", \"assignee\", \"assignees\", \"requested_reviewers\", \"requested_teams\", \"labels\", \"milestone\", \"draft\", \"commits_url\", \"review_comments_url\", \"review_comment_url\", \"comments_url\", \"statuses_url\", \"head\", \"base\", \"_links\", \"author_association\", \"auto_merge\", \"active_lock_reason\"}, {\"pull_requests.url\", \"pull_requests.id\", \"pull_requests.node_id\", \"pull_requests.html_url\", \"pull_requests.diff_url\", \"pull_requests.patch_url\", \"pull_requests.issue_url\", \"pull_requests.number\", \"pull_requests.state\", \"pull_requests.locked\", \"pull_requests.title\", \"pull_requests.user\", \"pull_requests.body\", \"pull_requests.created_at\", \"pull_requests.updated_at\", \"pull_requests.closed_at\", \"pull_requests.merged_at\", \"pull_requests.merge_commit_sha\", \"pull_requests.assignee\", \"pull_requests.assignees\", \"pull_requests.requested_reviewers\", \"pull_requests.requested_teams\", \"pull_requests.labels\", \"pull_requests.milestone\", \"pull_requests.draft\", \"pull_requests.commits_url\", \"pull_requests.review_comments_url\", \"pull_requests.review_comment_url\", \"pull_requests.comments_url\", \"pull_requests.statuses_url\", \"pull_requests.head\", \"pull_requests.base\", \"pull_requests._links\", \"pull_requests.author_association\", \"pull_requests.auto_merge\", \"pull_requests.active_lock_reason\"}),",
                 "    #\"Filtered Rows\" = Table.SelectRows(#\"Expanded pull_requests\", each ([pull_requests.draft] = false)),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Filtered Rows\",{{\"pull_requests.updated_at\", type datetime}, {\"pull_requests.closed_at\", type datetime}, {\"pull_requests.merged_at\", type datetime}, {\"pull_requests.created_at\", type datetime}}),",
                 "    #\"Added Custom\" = Table.AddColumn(#\"Changed Type\", \"merge_date_only\", each [pull_requests.merged_at]),",
@@ -5679,6 +5703,10 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -9837,14 +9865,17 @@
                 "    #\"Removed Other Columns\" = Table.SelectColumns(Source,{\"organization\", \"repositories.id\", \"repositories.teams_url\"}),",
                 "    #\"Invoked Custom Function\" = Table.AddColumn(#\"Removed Other Columns\", \"teams\", each GetTeams(Text.Replace([repositories.teams_url],GitHubAPI,\"\"))),",
                 "    #\"Expanded teams\" = Table.ExpandTableColumn(#\"Invoked Custom Function\", \"teams\", {\"Column1\"}, {\"teams.Column1\"}),",
-                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded teams\",{{\"teams.Column1\", \"teams\"}}),",
+                "    #\"Filtered Rows\" = Table.SelectRows(#\"Expanded teams\", each [teams.Column1] <> null and [teams.Column1] <> \"\"),",
+                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Filtered Rows\",{{\"teams.Column1\", \"teams\"}}),",
                 "    #\"Expanded teams1\" = Table.ExpandListColumn(#\"Renamed Columns\", \"teams\"),",
-                "    #\"Expanded teams2\" = Table.ExpandRecordColumn(#\"Expanded teams1\", \"teams\", {\"name\", \"id\", \"node_id\", \"slug\", \"description\", \"privacy\", \"notification_setting\", \"url\", \"html_url\", \"members_url\", \"repositories_url\", \"permission\", \"permissions\", \"parent\"}, {\"teams.name\", \"teams.id\", \"teams.node_id\", \"teams.slug\", \"teams.description\", \"teams.privacy\", \"teams.notification_setting\", \"teams.url\", \"teams.html_url\", \"teams.members_url\", \"teams.repositories_url\", \"teams.permission\", \"teams.permissions\", \"teams.parent\"}),",
+                "    #\"Filtered Rows1\" = Table.SelectRows(#\"Expanded teams1\", each [teams] <> null and [teams] <> \"\"),",
+                "    #\"Expanded teams2\" = Table.ExpandRecordColumn(#\"Filtered Rows1\", \"teams\", {\"name\", \"id\", \"node_id\", \"slug\", \"description\", \"privacy\", \"notification_setting\", \"url\", \"html_url\", \"members_url\", \"repositories_url\", \"permission\", \"permissions\", \"parent\"}, {\"teams.name\", \"teams.id\", \"teams.node_id\", \"teams.slug\", \"teams.description\", \"teams.privacy\", \"teams.notification_setting\", \"teams.url\", \"teams.html_url\", \"teams.members_url\", \"teams.repositories_url\", \"teams.permission\", \"teams.permissions\", \"teams.parent\"}),",
                 "    #\"Replaced Value\" = Table.ReplaceValue(#\"Expanded teams2\",\"{/member}\",\"\",Replacer.ReplaceText,{\"teams.members_url\"}),",
                 "    #\"Invoked Custom Function1\" = Table.AddColumn(#\"Replaced Value\", \"members\", each GetTeams(Text.Replace([teams.members_url],GitHubAPI,\"\"))),",
                 "    #\"Replaced Errors\" = Table.ReplaceErrorValues(#\"Invoked Custom Function1\", {{\"members\", null}}),",
                 "    #\"Expanded members\" = Table.ExpandTableColumn(#\"Replaced Errors\", \"members\", {\"Column1\"}, {\"members.Column1\"}),",
-                "    #\"Renamed Columns1\" = Table.RenameColumns(#\"Expanded members\",{{\"members.Column1\", \"members\"}}),",
+                "    #\"Filtered Rows2\" = Table.SelectRows(#\"Expanded members\", each [members.Column1] <> null and [members.Column1] <> \"\"),",
+                "    #\"Renamed Columns1\" = Table.RenameColumns(#\"Filtered Rows2\",{{\"members.Column1\", \"members\"}}),",
                 "    #\"Extracted Values\" = Table.TransformColumns(#\"Renamed Columns1\", {\"members\", each Text.Combine(List.Transform(_, each Text.From(_[login])), \",\"), type text}),",
                 "    #\"Replaced Errors1\" = Table.ReplaceErrorValues(#\"Extracted Values\", {{\"members\", null}})",
                 "in",

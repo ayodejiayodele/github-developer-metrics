@@ -291,7 +291,7 @@
           "z": 17000.00
         },
         {
-          "config": "{\"name\":\"4e5ce00e80012d8fc512\",\"layouts\":[{\"id\":0,\"position\":{\"x\":447.5,\"y\":461.25,\"z\":11000,\"width\":276.25,\"height\":115,\"tabOrder\":10000}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"Sum(PR_Commits.lead_time_for_commit_changes)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"p\",\"Entity\":\"PR_Commits\",\"Type\":0}],\"Select\":[{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"p\"}},\"Property\":\"lead_time_for_commit_changes\"}},\"Function\":1},\"Name\":\"Sum(PR_Commits.lead_time_for_commit_changes)\",\"NativeReferenceName\":\"Lead time for changes\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"p\"}},\"Property\":\"lead_time_for_commit_changes\"}},\"Function\":1}}}]},\"columnProperties\":{\"Sum(PR_Commits.lead_time_for_commit_changes)\":{\"displayName\":\"Lead time for changes\"}},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{\"color\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"40D\"}}}}}]},\"vcObjects\":{\"background\":[{\"properties\":{\"color\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":0,\"Percent\":-0.1}}}}},\"transparency\":{\"expr\":{\"Literal\":{\"Value\":\"50D\"}}}}}]}}}",
+          "config": "{\"name\":\"4e5ce00e80012d8fc512\",\"layouts\":[{\"id\":0,\"position\":{\"x\":447.5,\"y\":461.25,\"z\":11000,\"width\":276.25,\"height\":115,\"tabOrder\":10000}}],\"singleVisual\":{\"visualType\":\"card\",\"projections\":{\"Values\":[{\"queryRef\":\"Sum(PR_Commits.lead_time_for_commit_changes)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"p\",\"Entity\":\"PR_Commits\",\"Type\":0}],\"Select\":[{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"p\"}},\"Property\":\"lead_time_for_commit_changes\"}},\"Function\":1},\"Name\":\"Sum(PR_Commits.lead_time_for_commit_changes)\",\"NativeReferenceName\":\"Lead time for changes (days)\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"p\"}},\"Property\":\"lead_time_for_commit_changes\"}},\"Function\":1}}}]},\"columnProperties\":{\"Sum(PR_Commits.lead_time_for_commit_changes)\":{\"displayName\":\"Lead time for changes (days)\"}},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"labels\":[{\"properties\":{\"color\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0}}}}},\"fontSize\":{\"expr\":{\"Literal\":{\"Value\":\"40D\"}}}}}]},\"vcObjects\":{\"background\":[{\"properties\":{\"color\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":0,\"Percent\":-0.1}}}}},\"transparency\":{\"expr\":{\"Literal\":{\"Value\":\"50D\"}}}}}]}}}",
           "filters": "[{\"name\":\"Filterf748b9267670a9fdde91\",\"expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Entity\":\"PR_Commits\"}},\"Property\":\"pull_requests.merged_at\"}},\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"p\",\"Entity\":\"PR_Commits\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Not\":{\"Expression\":{\"In\":{\"Expressions\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"p\"}},\"Property\":\"pull_requests.merged_at\"}}],\"Values\":[[{\"Literal\":{\"Value\":\"null\"}}]]}}}}}]},\"type\":\"Categorical\",\"howCreated\":1,\"objects\":{\"general\":[{\"properties\":{\"isInvertedSelectionMode\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]}}]",
           "height": 115.00,
           "width": 276.25,
@@ -681,7 +681,7 @@
           "z": 5000.00
         },
         {
-          "config": "{\"name\":\"f853f2157e3360120d53\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":67.5,\"z\":10000,\"width\":328.75,\"height\":100,\"tabOrder\":9000}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"CopilotAttribution_Commits_PRs.commits_date_only\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"CopilotAttribution_Commits_PRs\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits_date_only\"},\"Name\":\"CopilotAttribution_Commits_PRs.commits_date_only\",\"NativeReferenceName\":\"Commit Date\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits_date_only\"}}}]},\"columnProperties\":{\"CopilotAttribution_Commits_PRs.commits_date_only\":{\"displayName\":\"Commit Date\"}},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Relative'\"}}},\"relativeRange\":{\"expr\":{\"Literal\":{\"Value\":\"'Last'\"}}},\"relativeDuration\":{\"expr\":{\"Literal\":{\"Value\":\"2D\"}}},\"relativePeriod\":{\"expr\":{\"Literal\":{\"Value\":\"'Years'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"CopilotAttribution_Commits_PRs\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Between\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits_date_only\"}},\"LowerBound\":{\"DateSpan\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"Now\":{}},\"Amount\":1,\"TimeUnit\":0}},\"Amount\":-2,\"TimeUnit\":3}},\"TimeUnit\":0}},\"UpperBound\":{\"DateSpan\":{\"Expression\":{\"Now\":{}},\"TimeUnit\":0}}}}}]}}}}],\"dateRange\":[{\"properties\":{\"includeToday\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"vcObjects\":{\"border\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"color\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0.6}}}}}}}]}}}",
+          "config": "{\"name\":\"f853f2157e3360120d53\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":67.5,\"z\":10000,\"width\":328.75,\"height\":100,\"tabOrder\":9000}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"CopilotAttribution_Commits_PRs.commits_date_only\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"CopilotAttribution_Commits_PRs\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits_date_only\"},\"Name\":\"CopilotAttribution_Commits_PRs.commits_date_only\",\"NativeReferenceName\":\"Commit Date\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits_date_only\"}}}]},\"columnProperties\":{\"CopilotAttribution_Commits_PRs.commits_date_only\":{\"displayName\":\"Commit Date\"}},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Relative'\"}}},\"relativeRange\":{\"expr\":{\"Literal\":{\"Value\":\"'Last'\"}}},\"relativeDuration\":{\"expr\":{\"Literal\":{\"Value\":\"3D\"}}},\"relativePeriod\":{\"expr\":{\"Literal\":{\"Value\":\"'Months'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"CopilotAttribution_Commits_PRs\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Between\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits_date_only\"}},\"LowerBound\":{\"DateSpan\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"Now\":{}},\"Amount\":1,\"TimeUnit\":0}},\"Amount\":-3,\"TimeUnit\":2}},\"TimeUnit\":0}},\"UpperBound\":{\"DateSpan\":{\"Expression\":{\"Now\":{}},\"TimeUnit\":0}}}}}]}}}}],\"dateRange\":[{\"properties\":{\"includeToday\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"vcObjects\":{\"border\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"color\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0.6}}}}}}}]}}}",
           "filters": "[]",
           "height": 100.00,
           "width": 328.75,
@@ -706,99 +706,6 @@
           "x": 1071.67,
           "y": 1303.33,
           "z": 16000.00
-        }
-      ],
-      "width": 1280.00
-    },
-    {
-      "config": "{}",
-      "displayName": "Commits Work",
-      "displayOption": 1,
-      "filters": "[]",
-      "height": 720.00,
-      "name": "ReportSection95365784e8ae6fd4f753",
-      "ordinal": 3,
-      "visualContainers": [
-        {
-          "config": "{\"name\":\"142e97faecbcb12c2ed4\",\"layouts\":[{\"id\":0,\"position\":{\"x\":654.1324921135647,\"y\":67.0031545741325,\"z\":4000,\"width\":34.06940063091483,\"height\":51.10410094637224,\"tabOrder\":4000}}],\"singleVisual\":{\"visualType\":\"image\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"imageUrl\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"repo18106743279815185.png\"}}}}}]}},\"howCreated\":\"InsertVisualButton\"}",
-          "filters": "[]",
-          "height": 51.10,
-          "width": 34.07,
-          "x": 654.13,
-          "y": 67.00,
-          "z": 4000.00
-        },
-        {
-          "config": "{\"name\":\"1b8d3063acc5f8f609df\",\"layouts\":[{\"id\":0,\"position\":{\"x\":510,\"y\":0,\"z\":6000,\"width\":465,\"height\":67.5,\"tabOrder\":6000}}],\"singleVisual\":{\"visualType\":\"textbox\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"Flow & Efficiency\",\"textStyle\":{\"fontSize\":\"32pt\",\"color\":\"#000000\"}}],\"horizontalTextAlignment\":\"center\"}]}}]},\"vcObjects\":{\"background\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 67.50,
-          "width": 465.00,
-          "x": 510.00,
-          "y": 0.00,
-          "z": 6000.00
-        },
-        {
-          "config": "{\"name\":\"1c8428124e70a61f74f9\",\"layouts\":[{\"id\":0,\"position\":{\"x\":160,\"y\":12.857142857142858,\"z\":2000,\"width\":231.42857142857144,\"height\":51.42857142857143,\"tabOrder\":1000}}],\"singleVisual\":{\"visualType\":\"textbox\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"paragraphs\":[{\"textRuns\":[{\"value\":\"Developer Metrics\",\"textStyle\":{\"fontWeight\":\"bold\",\"fontFamily\":\"Segoe UI Light\",\"fontSize\":\"20pt\"}}],\"horizontalTextAlignment\":\"center\"}]}}]},\"vcObjects\":{\"background\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}],\"padding\":[{\"properties\":{\"bottom\":{\"expr\":{\"Literal\":{\"Value\":\"2D\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 51.43,
-          "width": 231.43,
-          "x": 160.00,
-          "y": 12.86,
-          "z": 2000.00
-        },
-        {
-          "config": "{\"name\":\"31692f16180e93026932\",\"layouts\":[{\"id\":0,\"position\":{\"x\":16.128293241695303,\"y\":7.331042382588775,\"z\":1000,\"width\":143.68843069873998,\"height\":51.31729667812142,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"image\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"imageUrl\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"github-name09822345583269265.png\"}}}}}]}},\"howCreated\":\"InsertVisualButton\"}",
-          "filters": "[]",
-          "height": 51.32,
-          "width": 143.69,
-          "x": 16.13,
-          "y": 7.33,
-          "z": 1000.00
-        },
-        {
-          "config": "{\"name\":\"33389b2d5de0fbd26f28\",\"layouts\":[{\"id\":0,\"position\":{\"x\":1.25,\"y\":0,\"z\":0,\"width\":1278.75,\"height\":67.5,\"tabOrder\":2000}}],\"singleVisual\":{\"visualType\":\"shape\",\"drillFilterOtherVisuals\":true,\"objects\":{\"shape\":[{\"properties\":{\"tileShape\":{\"expr\":{\"Literal\":{\"Value\":\"'rectangle'\"}}}}}],\"rotation\":[{\"properties\":{\"shapeAngle\":{\"expr\":{\"Literal\":{\"Value\":\"0L\"}}}}}],\"fill\":[{\"properties\":{\"fillColor\":{\"solid\":{\"color\":{\"expr\":{\"Literal\":{\"Value\":\"'#D1D5DA'\"}}}}},\"transparency\":{\"expr\":{\"Literal\":{\"Value\":\"50D\"}}}},\"selector\":{\"id\":\"default\"}}],\"outline\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}}}}]}},\"howCreated\":\"InsertVisualButton\"}",
-          "filters": "[]",
-          "height": 67.50,
-          "width": 1278.75,
-          "x": 1.25,
-          "y": 0.00,
-          "z": 0.00
-        },
-        {
-          "config": "{\"name\":\"88af3eab7bce49568858\",\"layouts\":[{\"id\":0,\"position\":{\"x\":947.5,\"y\":63.75,\"z\":8000,\"width\":32.5,\"height\":51.25,\"tabOrder\":8000}}],\"singleVisual\":{\"visualType\":\"image\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"imageUrl\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"copilot5286957004124395.png\"}}}}}]}},\"howCreated\":\"InsertVisualButton\"}",
-          "filters": "[]",
-          "height": 51.25,
-          "width": 32.50,
-          "x": 947.50,
-          "y": 63.75,
-          "z": 8000.00
-        },
-        {
-          "config": "{\"name\":\"a4059cee319d3a1fe776\",\"layouts\":[{\"id\":0,\"position\":{\"x\":0,\"y\":67.5,\"z\":7000,\"width\":328.75,\"height\":100,\"tabOrder\":7000}}],\"singleVisual\":{\"visualType\":\"slicer\",\"projections\":{\"Values\":[{\"queryRef\":\"CommitsvsCopilot.commits.commit.author.date\",\"active\":true}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"CommitsvsCopilot\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits.commit.author.date\"},\"Name\":\"CommitsvsCopilot.commits.commit.author.date\",\"NativeReferenceName\":\"Commit Date\"}],\"OrderBy\":[{\"Direction\":1,\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits.commit.author.date\"}}}]},\"columnProperties\":{\"CommitsvsCopilot.commits.commit.author.date\":{\"displayName\":\"Commit Date\"}},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"data\":[{\"properties\":{\"mode\":{\"expr\":{\"Literal\":{\"Value\":\"'Relative'\"}}},\"relativeRange\":{\"expr\":{\"Literal\":{\"Value\":\"'Last'\"}}},\"relativeDuration\":{\"expr\":{\"Literal\":{\"Value\":\"6D\"}}},\"relativePeriod\":{\"expr\":{\"Literal\":{\"Value\":\"'Months'\"}}}}}],\"general\":[{\"properties\":{\"filter\":{\"filter\":{\"Version\":2,\"From\":[{\"Name\":\"c\",\"Entity\":\"CommitsvsCopilot\",\"Type\":0}],\"Where\":[{\"Condition\":{\"Between\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"commits.commit.author.date\"}},\"LowerBound\":{\"DateSpan\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"DateAdd\":{\"Expression\":{\"Now\":{}},\"Amount\":1,\"TimeUnit\":0}},\"Amount\":-6,\"TimeUnit\":2}},\"TimeUnit\":0}},\"UpperBound\":{\"DateSpan\":{\"Expression\":{\"Now\":{}},\"TimeUnit\":0}}}}}]}}}}],\"dateRange\":[{\"properties\":{\"includeToday\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}]},\"vcObjects\":{\"border\":[{\"properties\":{\"show\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}},\"color\":{\"solid\":{\"color\":{\"expr\":{\"ThemeDataColor\":{\"ColorId\":1,\"Percent\":0.6}}}}}}}]}}}",
-          "filters": "[]",
-          "height": 100.00,
-          "width": 328.75,
-          "x": 0.00,
-          "y": 67.50,
-          "z": 7000.00
-        },
-        {
-          "config": "{\"name\":\"ca0edf8c8caeff4855d6\",\"layouts\":[{\"id\":0,\"position\":{\"x\":390.01145475372283,\"y\":67.44558991981673,\"z\":3000,\"width\":889.9885452462772,\"height\":65.97938144329898,\"tabOrder\":3000}}],\"singleVisual\":{\"visualType\":\"multiRowCard\",\"projections\":{\"Values\":[{\"queryRef\":\"Organizations.organization\"},{\"queryRef\":\"Repositories.repos_url\"},{\"queryRef\":\"CopilotOrganization.total_seats\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"o\",\"Entity\":\"Organizations\",\"Type\":0},{\"Name\":\"r\",\"Entity\":\"Repositories\",\"Type\":0},{\"Name\":\"c\",\"Entity\":\"CopilotOrganization\",\"Type\":0}],\"Select\":[{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"o\"}},\"Property\":\"organization\"}},\"Function\":5},\"Name\":\"Organizations.organization\",\"NativeReferenceName\":\"Organizations\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"r\"}},\"Property\":\"repos_url\"}},\"Function\":5},\"Name\":\"Repositories.repos_url\",\"NativeReferenceName\":\"Repositories\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"c\"}},\"Property\":\"total_seats\"}},\"Function\":0},\"Name\":\"CopilotOrganization.total_seats\",\"NativeReferenceName\":\"Copilot Seats\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"o\"}},\"Property\":\"organization\"}},\"Function\":5}}}]},\"columnProperties\":{\"Organizations.organization\":{\"displayName\":\"Organizations\"},\"Repositories.repos_url\":{\"displayName\":\"Repositories\"},\"CopilotOrganization.total_seats\":{\"displayName\":\"Copilot Seats\"}},\"drillFilterOtherVisuals\":true,\"hasDefaultSort\":true,\"objects\":{\"dataLabels\":[{\"properties\":{\"fontFamily\":{\"expr\":{\"Literal\":{\"Value\":\"'wf_standard-font, helvetica, arial, sans-serif'\"}}},\"bold\":{\"expr\":{\"Literal\":{\"Value\":\"true\"}}}}}],\"card\":[{\"properties\":{\"outlineStyle\":{\"expr\":{\"Literal\":{\"Value\":\"4D\"}}},\"outlineWeight\":{\"expr\":{\"Literal\":{\"Value\":\"2D\"}}},\"barShow\":{\"expr\":{\"Literal\":{\"Value\":\"false\"}}},\"cardPadding\":{\"expr\":{\"Literal\":{\"Value\":\"20D\"}}}}}]}}}",
-          "filters": "[]",
-          "height": 65.98,
-          "width": 889.99,
-          "x": 390.01,
-          "y": 67.45,
-          "z": 3000.00
-        },
-        {
-          "config": "{\"name\":\"e6581b140882c6736e01\",\"layouts\":[{\"id\":0,\"position\":{\"x\":356.5930599369085,\"y\":67.0031545741325,\"z\":5000,\"width\":32.93375394321767,\"height\":51.10410094637224,\"tabOrder\":5000}}],\"singleVisual\":{\"visualType\":\"image\",\"drillFilterOtherVisuals\":true,\"objects\":{\"general\":[{\"properties\":{\"imageUrl\":{\"expr\":{\"ResourcePackageItem\":{\"PackageName\":\"RegisteredResources\",\"PackageType\":1,\"ItemName\":\"organization46308722572305117.png\"}}}}}]}},\"howCreated\":\"InsertVisualButton\"}",
-          "filters": "[]",
-          "height": 51.10,
-          "width": 32.93,
-          "x": 356.59,
-          "y": 67.00,
-          "z": 5000.00
         }
       ],
       "width": 1280.00
