@@ -8,11 +8,11 @@
       },
       {
         "name": "PBIDesktopVersion",
-        "value": "2.126.927.0 (24.02)"
+        "value": "2.126.1261.0 (24.02)"
       },
       {
         "name": "PBI_QueryOrder",
-        "value": "[\"Organizations\",\"Repositories\",\"GetRepos\",\"GetCommits\",\"Commits\",\"OrganizationList\",\"GetWorkflowRuns\",\"WorkflowRuns\",\"GetTeams\",\"Teams\",\"GetIssues\",\"Issues\",\"GetPRs\",\"Pull Requests\",\"PR_Commits\",\"PR_Reviews\",\"GetComments\",\"PR_FilesChanged_Reviews\",\"PR_Review_Stats\",\"CopilotOrganization\",\"GetCopilotDetails\",\"CopilotUsage\",\"CopilotUsageBreakdown\",\"CopilotAttribution_Commits_PRs\",\"GitHubAPI\"]"
+        "value": "[\"Organizations\",\"Repositories\",\"RepositoriesLanguages\",\"GetRepos\",\"GetRepoLanguages\",\"GetCommits\",\"Commits\",\"OrganizationList\",\"GetWorkflowRuns\",\"WorkflowRuns\",\"GetTeams\",\"Teams\",\"GetIssues\",\"Issues\",\"GetPRs\",\"Pull Requests\",\"PR_Commits\",\"PR_Reviews\",\"GetComments\",\"PR_FilesChanged_Reviews\",\"PR_Review_Stats\",\"CopilotOrganization\",\"GetCopilotDetails\",\"CopilotUsage\",\"CopilotUsageBreakdown\",\"CopilotAttribution_Commits_PRs\",\"GitHubAPI\",\"GetCopilotBilling\",\"GetCopilotSeats\",\"GetCopilotUsage\",\"Metrics Definitions\"]"
       },
       {
         "name": "PBI_ProTooling",
@@ -57,8 +57,8 @@
           "let",
           "    Source = List.Generate(()=>",
           "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=CommitUrl, Query=[per_page=\"100\", page=\"1\"]])) otherwise null, PageNumber=1],",
-          "      each [Result]<>null,",
-          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=CommitUrl, Query=[per_page=\"100\", page=PageNumber+1]])) otherwise null, PageNumber=[PageNumber]+1],",
+          "      each [Result]<>null and List.Count([Result]) > 0,",
+          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=CommitUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1)]])) otherwise null, PageNumber=[PageNumber]+1],",
           "      each [Result]),",
           "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
           "in",
@@ -101,15 +101,26 @@
         "expression": [
           "(RepoUrl as text) =>",
           "let",
-          "    RunPath = \"/actions/runs\",",
-          "    Source = List.Generate(()=>",
-          "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=RepoUrl & RunPath, Query=[per_page=\"100\", page=\"1\"]])) otherwise null, PageNumber=1],",
-          "      each [Result]<>null,",
-          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=RepoUrl & RunPath, Query=[per_page=\"100\", page=PageNumber+1]])) otherwise null, PageNumber=[PageNumber]+1],",
-          "      each [Result]),",
-          "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
+          "    RunPath = RepoUrl & \"/actions/runs\",",
+          "    EntitiesPerPage = 100,",
+          "",
+          "    GetWorkflowRuns = (PageIndex)=>",
+          "    let runs = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=RunPath, Query=[per_page=\"100\", page=Number.ToText(PageIndex)]])) otherwise null",
+          "    in runs,",
+          "",
+          "    GetCount =  ()=>",
+          "    let runs = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=RunPath])) otherwise null,",
+          "    runsCount = if runs <> null then runs[total_count] else 0",
+          "    in runsCount,",
+          "",
+          "    EntityCount = List.Max({ EntitiesPerPage, GetCount() }),",
+          "    PageCount   = Number.RoundUp(EntityCount / EntitiesPerPage),",
+          "    PageIndices = {1..PageCount},",
+          "",
+          "    Pages       = List.Transform(PageIndices, each GetWorkflowRuns(_)),",
+          "    #\"Converted to Table\" = Table.FromList(Pages, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
           "in",
-          "#\"Converted to Table\""
+          "    #\"Converted to Table\""
         ],
         "kind": "m",
         "lineageTag": "0aee7bce-f023-40cb-8eed-c561d5110a26",
@@ -160,8 +171,8 @@
           "let",
           "    Source = List.Generate(()=>",
           "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=IssuesUrl, Query=[per_page=\"100\", page=\"1\", state=\"all\"]])) otherwise null, PageNumber=1],",
-          "      each [Result]<>null,",
-          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=IssuesUrl, Query=[per_page=\"100\", page=PageNumber+1, state=\"all\"]])) otherwise null, PageNumber=[PageNumber]+1],",
+          "      each [Result]<>null and List.Count([Result]) > 0,",
+          "      each [Result =  Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=IssuesUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1), state=\"all\"]])) , PageNumber=[PageNumber]+1],",
           "      each [Result]),",
           "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
           "in",
@@ -188,8 +199,8 @@
           "let",
           "    Source = List.Generate(()=>",
           "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=prUrl, Query=[per_page=\"100\", page=\"1\", state=\"all\"]])) otherwise null, PageNumber=1],",
-          "      each [Result]<>null,",
-          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=prUrl, Query=[per_page=\"100\", page=PageNumber+1, state=\"all\"]])) otherwise null, PageNumber=[PageNumber]+1],",
+          "      each [Result]<>null and List.Count([Result]) > 0,",
+          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=prUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1), state=\"all\"]])) otherwise null, PageNumber=[PageNumber]+1],",
           "      each [Result]),",
           "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
           "in",
@@ -216,8 +227,8 @@
           "let",
           "    Source = List.Generate(()=>",
           "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=commentsUrl, Query=[per_page=\"100\", page=\"1\"]])) otherwise null, PageNumber=1],",
-          "      each [Result]<>null,",
-          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=commentsUrl, Query=[per_page=\"100\", page=PageNumber+1]])) otherwise null, PageNumber=[PageNumber]+1],",
+          "      each [Result]<>null and List.Count([Result]) > 0,",
+          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=commentsUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1)]])) otherwise null, PageNumber=[PageNumber]+1],",
           "      each [Result]),",
           "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
           "in",
@@ -272,8 +283,8 @@
           "let",
           "    Source = List.Generate(()=>",
           "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=reposUrl, Query=[per_page=\"100\", page=\"1\"]])) otherwise null, PageNumber=1],",
-          "      each [Result]<>null,",
-          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=reposUrl, Query=[per_page=\"100\", page=PageNumber+1]])) otherwise null, PageNumber=[PageNumber]+1],",
+          "      each [Result]<>null and List.Count([Result]) > 0,",
+          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=reposUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1)]])) otherwise null, PageNumber=[PageNumber]+1],",
           "      each [Result]),",
           "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
           "in",
@@ -300,6 +311,132 @@
         "kind": "m",
         "lineageTag": "8876cdb9-a921-4aaf-94b8-df049787d172",
         "queryGroup": "Parameters"
+      },
+      {
+        "name": "GetRepoLanguages",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Function"
+          }
+        ],
+        "expression": [
+          "(reposLangUrl as text) =>",
+          "let",
+          "    Source = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=reposLangUrl])) otherwise null",
+          "in",
+          "Source"
+        ],
+        "kind": "m",
+        "lineageTag": "70ead6ad-a2cb-4728-9e28-ae0b7f65dcba",
+        "queryGroup": "Functions"
+      },
+      {
+        "name": "GetCopilotBilling",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Function"
+          }
+        ],
+        "expression": [
+          "(copilotUrl as text) =>",
+          "let",
+          "    Source =  try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl])) otherwise null",
+          "in",
+          "Source"
+        ],
+        "kind": "m",
+        "lineageTag": "4381898b-aa4b-48b5-978b-caa69e2a13bf",
+        "queryGroup": "Functions"
+      },
+      {
+        "name": "GetCopilotSeats",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Function"
+          }
+        ],
+        "expression": [
+          "/*(copilotUrl as text) =>",
+          "let",
+          "    Source = List.Generate(()=>",
+          "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=\"1\"]])) otherwise null, PageNumber=1],",
+          "      each [Result]<>null and List.Count([Result][seats]) > 0,",
+          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1)]])) otherwise null, PageNumber=[PageNumber]+1],",
+          "      each [Result]),",
+          "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
+          "in",
+          "#\"Converted to Table\"*/",
+          "",
+          "",
+          "",
+          "(copilotUrl as text) =>",
+          "let",
+          "    EntitiesPerPage = 100,",
+          "",
+          "    GetSeats = (PageIndex)=>",
+          "    let seats = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=Number.ToText(PageIndex)]])) otherwise null",
+          "    in seats,",
+          "",
+          "    GetCount =  ()=>",
+          "    let seats = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl])) otherwise null,",
+          "    seatCount = if seats <> null then seats[total_seats] else 0",
+          "    in seatCount,",
+          "",
+          "    EntityCount = List.Max({ EntitiesPerPage, GetCount() }),",
+          "    PageCount   = Number.RoundUp(EntityCount / EntitiesPerPage),",
+          "    PageIndices = {1..PageCount},",
+          "",
+          "    Pages       = List.Transform(PageIndices, each GetSeats(_)),",
+          "    #\"Converted to Table\" = Table.FromList(Pages, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
+          "in",
+          "    #\"Converted to Table\""
+        ],
+        "kind": "m",
+        "lineageTag": "977564d2-8040-45e8-ab4d-0e54cfa94025",
+        "queryGroup": "Functions"
+      },
+      {
+        "name": "GetCopilotUsage",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Function"
+          }
+        ],
+        "expression": [
+          "(copilotUrl as text) =>",
+          "let",
+          "    Source = List.Generate(()=>",
+          "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=\"1\"]])) otherwise null, PageNumber=1],",
+          "      each [Result]<>null and List.Count([Result]) > 0,",
+          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1)]])) otherwise null, PageNumber=[PageNumber]+1],",
+          "      each [Result]),",
+          "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
+          "in",
+          "#\"Converted to Table\""
+        ],
+        "kind": "m",
+        "lineageTag": "291653ea-c9e6-4af6-bacd-3d30bac96913",
+        "queryGroup": "Functions"
       }
     ],
     "queryGroups": [
@@ -734,6 +871,14 @@
         "joinOnDateBehavior": "datePartOnly",
         "toColumn": "Date",
         "toTable": "LocalDateTable_fc0d29ab-07b6-4fae-bdd8-40a386a9fe06"
+      },
+      {
+        "name": "1ac23c37-7d4f-43f4-a320-9b855a15becc",
+        "crossFilteringBehavior": "bothDirections",
+        "fromColumn": "repositories.id",
+        "fromTable": "RepositoriesLanguages",
+        "toColumn": "repositories.id",
+        "toTable": "Repositories"
       }
     ],
     "sourceQueryCulture": "en-US",
@@ -1020,10 +1165,6 @@
       {
         "name": "Repositories",
         "annotations": [
-          {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
-          },
           {
             "name": "PBI_ResultType",
             "value": "Table"
@@ -3370,10 +3511,6 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
-          },
-          {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
           }
         ],
         "columns": [
@@ -4663,19 +4800,6 @@
             "summarizeBy": "none"
           },
           {
-            "name": "pull_requests.user",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ],
-            "dataType": "string",
-            "lineageTag": "f71eb62e-f585-42c8-8aaa-6b81ba6f80ae",
-            "sourceColumn": "pull_requests.user",
-            "summarizeBy": "none"
-          },
-          {
             "name": "pull_requests.body",
             "annotations": [
               {
@@ -5063,6 +5187,32 @@
                 "relationship": "c8a4c81a-9459-4872-a8ec-2aaacc440e5d"
               }
             ]
+          },
+          {
+            "name": "pull_requests.user.login",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "e89f2b64-1def-4a6c-b577-6e4f122ca1d6",
+            "sourceColumn": "pull_requests.user.login",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "pull_requests.user.type",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "5b744fe6-7c2c-4a0f-afd3-e1373d90d720",
+            "sourceColumn": "pull_requests.user.type",
+            "summarizeBy": "none"
           }
         ],
         "lineageTag": "5bdb5249-b7f5-42fd-a506-99f6210dd160",
@@ -5085,9 +5235,10 @@
                 "    #\"Filtered Rows\" = Table.SelectRows(#\"Expanded pull_requests\", each ([pull_requests.draft] = false)),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Filtered Rows\",{{\"pull_requests.updated_at\", type datetime}, {\"pull_requests.closed_at\", type datetime}, {\"pull_requests.merged_at\", type datetime}, {\"pull_requests.created_at\", type datetime}}),",
                 "    #\"Added Custom\" = Table.AddColumn(#\"Changed Type\", \"merge_date_only\", each [pull_requests.merged_at]),",
-                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Added Custom\",{{\"merge_date_only\", type date}})",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Added Custom\",{{\"merge_date_only\", type date}}),",
+                "    #\"Expanded pull_requests.user\" = Table.ExpandRecordColumn(#\"Changed Type1\", \"pull_requests.user\", {\"login\", \"type\"}, {\"pull_requests.user.login\", \"pull_requests.user.type\"})",
                 "in",
-                "    #\"Changed Type1\""
+                "    #\"Expanded pull_requests.user\""
               ],
               "type": "m"
             }
@@ -5703,10 +5854,6 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
-          },
-          {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
           }
         ],
         "columns": [
@@ -7686,7 +7833,7 @@
         "annotations": [
           {
             "name": "PBI_ResultType",
-            "value": "Table"
+            "value": "Exception"
           }
         ],
         "columns": [
@@ -8652,19 +8799,17 @@
                 "    Source = Organizations,",
                 "    #\"Added Custom2\" = Table.AddColumn(Source, \"billing_url\", each [copilot_url]&\"/billing\"),",
                 "    #\"Added Custom3\" = Table.AddColumn(#\"Added Custom2\", \"seat_assignments_url\", each [billing_url]&\"/seats\"),",
-                "    #\"Invoked Custom Function\" = Table.AddColumn(#\"Added Custom3\", \"billing\", each GetCopilotDetails(Text.Replace([billing_url],GitHubAPI,\"\"))),",
-                "    #\"Invoked Custom Function1\" = Table.AddColumn(#\"Invoked Custom Function\", \"seats\", each GetCopilotDetails(Text.Replace([seat_assignments_url],GitHubAPI,\"\"))),",
-                "    #\"Expanded billing\" = Table.ExpandTableColumn(#\"Invoked Custom Function1\", \"billing\", {\"Column1\"}, {\"billing.Column1\"}),",
-                "    #\"Renamed Columns\" = Table.RenameColumns(#\"Expanded billing\",{{\"billing.Column1\", \"billing\"}}),",
-                "    #\"Expanded billing1\" = Table.ExpandRecordColumn(#\"Renamed Columns\", \"billing\", {\"seat_breakdown\", \"seat_management_setting\", \"public_code_suggestions\", \"ide_chat\", \"cli\", \"platform_chat\"}, {\"billing.seat_breakdown\", \"billing.seat_management_setting\", \"billing.public_code_suggestions\", \"billing.ide_chat\", \"billing.cli\", \"billing.platform_chat\"}),",
-                "    #\"Expanded seats\" = Table.ExpandTableColumn(#\"Expanded billing1\", \"seats\", {\"Column1\"}, {\"seats.Column1\"}),",
+                "    #\"Invoked Custom Function\" = Table.AddColumn(#\"Added Custom3\", \"billing\", each GetCopilotBilling(Text.Replace([billing_url],GitHubAPI,\"\"))),",
+                "    #\"Invoked Custom Function1\" = Table.AddColumn(#\"Invoked Custom Function\", \"seats\", each GetCopilotSeats(Text.Replace([seat_assignments_url],GitHubAPI,\"\"))),",
+                "    #\"Expanded billing2\" = Table.ExpandRecordColumn(#\"Invoked Custom Function1\", \"billing\", {\"seat_breakdown\", \"seat_management_setting\", \"public_code_suggestions\", \"ide_chat\", \"cli\", \"platform_chat\"}, {\"billing.seat_breakdown\", \"billing.seat_management_setting\", \"billing.public_code_suggestions\", \"billing.ide_chat\", \"billing.cli\", \"billing.platform_chat\"}),",
+                "    #\"Expanded billing.seat_breakdown\" = Table.ExpandRecordColumn(#\"Expanded billing2\", \"billing.seat_breakdown\", {\"total\", \"added_this_cycle\", \"pending_invitation\", \"pending_cancellation\", \"active_this_cycle\", \"inactive_this_cycle\"}, {\"billing.seat_breakdown.total\", \"billing.seat_breakdown.added_this_cycle\", \"billing.seat_breakdown.pending_invitation\", \"billing.seat_breakdown.pending_cancellation\", \"billing.seat_breakdown.active_this_cycle\", \"billing.seat_breakdown.inactive_this_cycle\"}),",
+                "    #\"Expanded seats\" = Table.ExpandTableColumn(#\"Expanded billing.seat_breakdown\", \"seats\", {\"Column1\"}, {\"seats.Column1\"}),",
                 "    #\"Renamed Columns2\" = Table.RenameColumns(#\"Expanded seats\",{{\"seats.Column1\", \"seats\"}}),",
                 "    #\"Expanded seats1\" = Table.ExpandRecordColumn(#\"Renamed Columns2\", \"seats\", {\"total_seats\", \"seats\"}, {\"total_seats\", \"seats\"}),",
                 "    #\"Expanded seats2\" = Table.ExpandListColumn(#\"Expanded seats1\", \"seats\"),",
                 "    #\"Expanded seats3\" = Table.ExpandRecordColumn(#\"Expanded seats2\", \"seats\", {\"created_at\", \"assignee\", \"updated_at\", \"pending_cancellation_date\", \"last_activity_at\", \"last_activity_editor\"}, {\"created_at\", \"assignee\", \"updated_at\", \"pending_cancellation_date\", \"last_activity_at\", \"last_activity_editor\"}),",
                 "    #\"Expanded assignee\" = Table.ExpandRecordColumn(#\"Expanded seats3\", \"assignee\", {\"login\", \"id\"}, {\"assignee.login\", \"assignee.id\"}),",
-                "    #\"Expanded billing.seat_breakdown\" = Table.ExpandRecordColumn(#\"Expanded assignee\", \"billing.seat_breakdown\", {\"total\", \"added_this_cycle\", \"pending_invitation\", \"pending_cancellation\", \"active_this_cycle\", \"inactive_this_cycle\"}, {\"billing.seat_breakdown.total\", \"billing.seat_breakdown.added_this_cycle\", \"billing.seat_breakdown.pending_invitation\", \"billing.seat_breakdown.pending_cancellation\", \"billing.seat_breakdown.active_this_cycle\", \"billing.seat_breakdown.inactive_this_cycle\"}),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Expanded billing.seat_breakdown\",{{\"created_at\", type datetimezone}, {\"updated_at\", type datetimezone}, {\"last_activity_at\", type datetimezone}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Expanded assignee\",{{\"created_at\", type datetimezone}, {\"updated_at\", type datetimezone}, {\"last_activity_at\", type datetimezone}})",
                 "in",
                 "    #\"Changed Type\""
               ],
@@ -9611,10 +9756,6 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
-          },
-          {
-            "name": "PBI_NavigationStepName",
-            "value": "Navigation"
           }
         ],
         "columns": [
@@ -10483,7 +10624,7 @@
         "annotations": [
           {
             "name": "PBI_ResultType",
-            "value": "Table"
+            "value": "Exception"
           }
         ],
         "columns": [
@@ -11243,6 +11384,10 @@
           {
             "name": "PBI_ResultType",
             "value": "Table"
+          },
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
           }
         ],
         "columns": [
@@ -13483,6 +13628,205 @@
           }
         ],
         "showAsVariationsOnly": true
+      },
+      {
+        "name": "RepositoriesLanguages",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "repositories.id",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "8e96117d-2dac-4e26-b19f-9be39a338b78",
+            "sourceColumn": "repositories.id",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "repositories.full_name",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "e31cd45e-0429-49d2-8e23-b244fc77d066",
+            "sourceColumn": "repositories.full_name",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "repositories.url",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "2c0ed4fd-7ca9-4e05-afb5-7208ca5bf8a2",
+            "sourceColumn": "repositories.url",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "languagesurl",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "54628807-aef5-4557-b690-b1fa873eb242",
+            "sourceColumn": "languagesurl",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "language",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "26d792fd-18fa-4723-b549-d5683879ff1d",
+            "sourceColumn": "language",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "language_lines_of_code",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "71525572-0a37-4193-98ed-83eaff0e8045",
+            "sourceColumn": "language_lines_of_code",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "15f46498-5c93-44a2-97ae-b1aa23c8eed5",
+        "partitions": [
+          {
+            "name": "RepositoriesLanguages",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Repositories,",
+                "    #\"Removed Other Columns\" = Table.SelectColumns(Source,{\"repositories.id\", \"repositories.full_name\", \"repositories.url\"}),",
+                "    #\"Added Custom\" = Table.AddColumn(#\"Removed Other Columns\", \"languagesurl\", each Text.Replace([repositories.url],GitHubAPI,\"\")&\"/languages\"),",
+                "    #\"Invoked Custom Function\" = Table.AddColumn(#\"Added Custom\", \"languages\", each GetRepoLanguages([languagesurl])),",
+                "    TransformTable = Table.TransformColumns(#\"Invoked Custom Function\",{{\"languages\", Record.ToTable}}),",
+                "    #\"Expanded languages\" = Table.ExpandTableColumn(TransformTable, \"languages\", {\"Name\", \"Value\"}, {\"language\", \"language_lines_of_code\"})",
+                "in",
+                "    #\"Expanded languages\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Metrics Definitions",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "Metric",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "46294634-96e1-4d2a-a154-0621f929b9a2",
+            "sourceColumn": "Metric",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Description",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "f8927d5b-137d-49af-8d7a-9320ebf55dea",
+            "sourceColumn": "Description",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "Importance",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "9aac01a8-0efa-4660-b062-6f7c2fe22a77",
+            "sourceColumn": "Importance",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "How to Measure ",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "97740ee2-7c5c-45a5-abef-5172c1015da7",
+            "sourceColumn": "How to Measure ",
+            "summarizeBy": "none"
+          }
+        ],
+        "lineageTag": "f051acae-f6b5-420c-9c1f-86ba149118d2",
+        "partitions": [
+          {
+            "name": "Metrics Definitions",
+            "mode": "import",
+            "source": {
+              "expression": [
+                "let",
+                "    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText(\"nVbbbhs3EP0VQk82YNTfUCRIG8AuFCXIi5EHipzVElqSG5IrVX3KZ7S/ly/pmVnuaiUrKdAH21heZs6cOWfol5fVM5XkzOph9ZaySa4vLgZ8vfd9TEUHQ/j4PR5VieqZdB4SqdWXh5fVE2mrPjnP+/xHbakciYI6tvhVWlIN6cLHE30dKBfVxKRMwiJZpYN9ffCos7LUd/GEE8jXp2gHUwF9bIFHdZy1IF1WLlhnEEw1OhdKuHmgLvaeQlHmZDrKuDVB5jR2SJqDXSJ1OQ/0OGREyCWmExYuUI6A9LYj7GNVin/D8X9c/RLKMaY9dnc6qDsTLSkTvXflXgGIfsXR/+VFCr4mpsKglJVOM08uqCFYLKK71oWdpEJIVOhrxXKNt7TKsRtqpv/mEvXxLUROP6XvrSwKPe+k8mBOVWaxKQgU6KiELPeTyuvVUk9wuKwoSK5aa0Nkt9rsVRdjf62HMPgtzsRmEfYiVs+q0icF3aLG/dj5VocdqXfadRxnwyVBAkwhJYNrGrsIObZaDmdk00Va7HCljbCC+xPLiJvIk3UjlbphyDexIMUTyGlqVnC/7DOI5ZoTwR35lezPZfJ18DiduyKUqxMpY3lD7IWpsiKres+yjLhu4oG5TdGrHp12ulOwz8EZ9CughjTIFJECSyzYrsAZ2ofBoR81yEl5F5x3fwGNjcdQRkct4UtyyeWCcXbsd6GRIYEzS5QrWA9dB/ijmz5jRwL+MXOw3mTlKe3AAydCkculmVLPG9V/Wd05D6IOJLJ4GLt3L57aUSliFGvJLpC36JbX4STBj4SVOQObCh0w7BAurknaj7ZYb9RHUMGmxp9XKpKr680v6lPLMyoOnYX9rnrcucDKqlc9DNk4QfakkT8JHm4lHBH4Wxg8ODouwLtGDZmr+o0Csc8PpH59L7NXRCPkXCZi+aKfEL9UspGQCj4v7QX9YkaeC3gMSiuzcLZaz62bBuEZFCebz80NqvDHY0vJVxgLSuqZx4tk680S6HKSuyIE5TM1F20QK47UyekKCFQgccvPE+uStL/w4Sxi9LiWOE40fOtexGUF0DPL5DwVH8fvOmbOA1IEYGdVcVO0kwFMW3h74m1W8FKr07Ow1Gu4ZRAR3A7dD1dCfTPO+coao/rKru5Okmfx7IDyvqPRIdPrUHTeT+8WUk6rzFBm21DTOOO4+NtPFd9XmKcty4h/Wn2Y9pLbtWhfjJ20r6YXj/ib7cBAGYfv3e1/Bjw3hkN9//Y30KBRO9CZv3/7535MMD/ohRv45V8=\", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t, Column2 = _t, Column3 = _t, Column4 = _t]),",
+                "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
+                "    #\"Changed Type1\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"Metric\", type text}, {\"Description\", type text}, {\"Importance\", type text}, {\"How to Measure \", type text}})",
+                "in",
+                "    #\"Changed Type1\""
+              ],
+              "type": "m"
+            }
+          }
+        ]
       }
     ]
   }

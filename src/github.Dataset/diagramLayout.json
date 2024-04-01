@@ -198,6 +198,32 @@
             "width": 234
           },
           "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 978.10005608713891,
+            "y": 0
+          },
+          "nodeIndex": "RepositoriesLanguages",
+          "nodeLineageTag": "15f46498-5c93-44a2-97ae-b1aa23c8eed5",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 978.10005608713891,
+            "y": 0
+          },
+          "nodeIndex": "Metrics Definitions",
+          "nodeLineageTag": "f051acae-f6b5-420c-9c1f-86ba149118d2",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",
