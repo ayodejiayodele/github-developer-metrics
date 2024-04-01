@@ -2,6 +2,8 @@
 
 ## Transformation Steps
 
+Each of these steps represents a transformation applied to the data in the Power Query Editor.
+
 1. **Step 1**: `Source = Table.FromList(Text.Split(OrganizationList,","))` - This line sets the source of the data to be a table created from a list. The list is obtained by splitting the `OrganizationList` string at each comma.
 
 2. **Step 2**: `#"Renamed Columns" = Table.RenameColumns(Source,{{"Column1", "organization"}})` - This line renames the "Column1" column in the "Source" table to "organization".
