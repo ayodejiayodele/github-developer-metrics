@@ -16,9 +16,22 @@ The repository is structured as follows:
 - `src/github.Report`: This directory contains the report definitions and configurations.
 - `api.github.com.pbids`, `github.pbit`, `src/github.pbip`: These files are related to Power BI and are used for data visualization.
 
+
 ## Setup
 
-To use this report, you need to have Power BI Desktop installed or the Power BI online service. There are two options.
+To use this report, you need to have Power BI Desktop installed or the Power BI online service. 
+
+There are two versions of the report available:
+1. Copilot-only metrics - this report displays visualizations solely coming from Copilot billing and usage stats
+2. Developer/Copilot metrics - this report displays better visualizations overlaying Copilot metrics over flow metrics such as pull requests, commits, workflows, etc. to indicate impact of Copilot on development work.
+
+`Screenshots are available in the [images](/images) directory
+
+### Copilot Only Metrics Setup
+Download and open the [Copilot Only Power BI template](/github_dev_metrics_copilot_only.pbit) `.pbit` file in Power BI Desktop and connect to your GitHub data source.
+
+### Devloper Metrics + Copilot Metrics Setup
+There are two options to use this:
 
 ### Option 1 - Install the Power BI App from AppSource
 
