@@ -48,12 +48,18 @@ You can then customize the reports to suit your needs and consume locally. Alter
 ### What you need to begin
 
 The report makes use of the following parameters:
-| Parameter | |
+| Parameters | |
 | --- | --- |
 | Name | OrganizationList |
 | Description | Comma-separated list of GitHub organizations to report on |
 | Type | Text |
 | Required | True |
+| >>>>>> | |
+| Name | GitHubAPI |
+| Description | The endpoint prefix for the GitHub API |
+| Type | Text |
+| Required | True |
+| Value | https://api.github.com |
 
 ### Authentication
 
