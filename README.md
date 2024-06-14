@@ -6,7 +6,7 @@ This repository contains dashboards and report templates for reporting developer
 
 The project uses Power BI for data visualization, showcasing metrics around commits, pull requests, and CI/CD workflow runs. It also includes metrics related to GitHub Copilot, comparing the before and after figures to showcase the impact and value of Copilot in the development process.
 
-![Dashboard image](images/screenshot_workflowruns.png)
+![Dashboard image](images/copilot_only_stats.png)
 
 ## Structure
 
@@ -51,7 +51,7 @@ The report makes use of the following parameters:
 | Parameters | |
 | --- | --- |
 | Name | OrganizationList |
-| Description | Comma-separated list of GitHub organizations to report on |
+| Description | Comma-separated list of GitHub organizations to report on _(preferably < 10)_ |
 | Type | Text |
 | Required | True |
 | >>>>>> | |
@@ -61,7 +61,7 @@ The report makes use of the following parameters:
 | Required | True |
 | Value | https://api.github.com |
 
-### Authentication
+#### Authentication
 
 > [!IMPORTANT]
 > To connect to your GitHub data, the integration requires authentication and authorisation. For authentication, select `Basic` authentication and supply your username and password.
@@ -76,7 +76,7 @@ The report makes use of the following parameters:
 > [!NOTE]
 > If you encounter errors during refresh such as _Information is needed in order to combine data. Please specify a privacy level for each data source._, try changing the privacy level to `Organization` or `Public`.
 
-### Authorization
+#### Authorization
 
 Create a `classic` personal access token (PAT). For more information on how to create PATs, follow the [GitHub documentation](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic).
 
