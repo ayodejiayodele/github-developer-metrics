@@ -71,7 +71,10 @@ The report makes use of the following parameters:
 | Type | Basic |
 | Username | _provide your username_ |
 | Password | _provide your PAT token_ |
-| Privacy Level | Organization |
+| Privacy Level | None |
+
+> [!NOTE]
+> If you encounter errors during refresh such as _Information is needed in order to combine data. Please specify a privacy level for each data source._, try changing the privacy level to `Organization` or `Public`.
 
 ### Authorization
 
