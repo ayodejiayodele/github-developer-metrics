@@ -50,12 +50,12 @@ You can then customize the reports to suit your needs and consume locally. Alter
 The report makes use of the following parameters:
 | Parameters | |
 | --- | --- |
-| Name | OrganizationList |
+| Name | **OrganizationList** |
 | Description | Comma-separated list of GitHub organizations to report on _(preferably < 10)_ |
 | Type | Text |
 | Required | True |
 | >>>>>> | |
-| Name | GitHubAPI |
+| Name | **GitHubAPI** |
 | Description | The endpoint prefix for the GitHub API |
 | Type | Text |
 | Required | True |
