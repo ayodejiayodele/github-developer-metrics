@@ -74,7 +74,7 @@ The report makes use of the following parameters:
 | Privacy Level | None |
 
 > [!NOTE]
-> If you encounter errors during refresh such as _Information is needed in order to combine data. Please specify a privacy level for each data source._, try changing the privacy level to `Organization` or `Public`.
+> If you encounter errors during refresh such as _Information is needed in order to combine data. Please specify a privacy level for each data source._, try changing the privacy level to `Organization` or `Public`. You could also consider ignoring the privacy level in the file for troubleshooting purposes. [Learn more about privacy levels](https://learn.microsoft.com/en-us/power-bi/enterprise/desktop-privacy-levels).
 
 #### Authorization
 
