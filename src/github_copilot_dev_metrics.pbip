@@ -3,7 +3,7 @@
   "artifacts": [
     {
       "report": {
-        "path": "github.Report"
+        "path": "github_copilot_dev_metrics.Report"
       }
     }
   ],

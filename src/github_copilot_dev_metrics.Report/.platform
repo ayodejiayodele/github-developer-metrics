@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "github_copilot_dev_metrics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3f8bd4b2-2fc7-4ecf-a57b-dedf68b42bd1"
+  }
+}

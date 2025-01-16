@@ -1,0 +1,473 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 284,
+            "y": 153
+          },
+          "nodeIndex": "Organizations",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 978.10005608713891,
+            "y": 5
+          },
+          "nodeIndex": "CopilotOrgStats",
+          "nodeLineageTag": "3c29cc6a-f1bb-4d22-9c08-8e9d9c990fb3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 978.10005608713891,
+            "y": 5
+          },
+          "nodeIndex": "Adoption Progress",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 978.10005608713891,
+            "y": 5
+          },
+          "nodeIndex": "CopilotEnterpriseStats",
+          "nodeLineageTag": "405d3975-848c-4d61-9151-cbbe4a561247",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1272.1000560871389,
+            "y": 69
+          },
+          "nodeIndex": "CopilotEnterpriseOrgsWithSeats",
+          "nodeLineageTag": "56a23c17-1fb7-4325-b0fa-367d82f19fcd",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 988.10005608713891,
+            "y": -5
+          },
+          "nodeIndex": "CopilotEnterpriseSeats",
+          "nodeLineageTag": "d561c723-633e-4d33-8065-6402710bdb50",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1272.1000560871389,
+            "y": 103
+          },
+          "nodeIndex": "Measures_AdoptionOnboarding",
+          "nodeLineageTag": "99ac164c-a814-49ff-acfe-a7bb70f46c38",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 658,
+            "y": 252
+          },
+          "nodeIndex": "CopilotOrgUsage",
+          "nodeLineageTag": "e56134fc-3c6d-472b-b546-9aeb19950454",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1272.1000560871389,
+            "y": 67
+          },
+          "nodeIndex": "EnterpriseLicenses",
+          "nodeLineageTag": "ddbb4188-ece3-4ede-928a-b1d63ccbd87f",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1272.1000560871389,
+            "y": 31
+          },
+          "nodeIndex": "CopilotEnterpriseUsageNewSchema",
+          "nodeLineageTag": "c826ea43-6542-4eee-aef3-f2ea21b0fe07",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1272.1000560871389,
+            "y": 0
+          },
+          "nodeIndex": "DotComChat",
+          "nodeLineageTag": "04381765-f4ff-41f6-a8c3-1b000cebdcad",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1645.6170801379694,
+            "y": 0
+          },
+          "nodeIndex": "DotComPullRequestSummaries",
+          "nodeLineageTag": "15d7a971-618c-4eef-98f7-9d2c85c1966a",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2019.1341041888,
+            "y": 0
+          },
+          "nodeIndex": "IDEChat",
+          "nodeLineageTag": "02b0099d-2056-4b32-9bfa-2fe691d226af",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2392.6511282396305,
+            "y": 0
+          },
+          "nodeIndex": "IDECodeCompletions",
+          "nodeLineageTag": "cc487239-fb47-4615-9ba0-fa325ba50868",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2402.6511282396305,
+            "y": 28.992555389799207
+          },
+          "nodeIndex": "IDEChatEditors",
+          "nodeLineageTag": "ca4a86a4-0f7d-4262-b15d-89824bfb6c79",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3245.0341782543246,
+            "y": 10
+          },
+          "nodeIndex": "IDECodeCompletionsEditors",
+          "nodeLineageTag": "48bf773c-aede-46f9-a9fe-beb0899bab12",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2686.8526894328156,
+            "y": 91.852142570045515
+          },
+          "nodeIndex": "Integrations",
+          "nodeLineageTag": "01db0c1b-97e5-4687-a14c-cffe279f9e76",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3245.0341782543246,
+            "y": 105.5
+          },
+          "nodeIndex": "ReportDates",
+          "nodeLineageTag": "afd7a019-e4f4-44f7-9c40-39d9c90f9ae6",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3245.0341782543246,
+            "y": 104.5
+          },
+          "nodeIndex": "DotComChatModels",
+          "nodeLineageTag": "85878a66-7bf5-4ac6-981a-7e11f1212f80",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3529.0341782543246,
+            "y": 92.5
+          },
+          "nodeIndex": "DotComPullRequestSummariesModels",
+          "nodeLineageTag": "6a620994-ad90-42d3-a8d6-9ef12081bb20",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3529.0341782543246,
+            "y": 152.5
+          },
+          "nodeIndex": "AllUsageData",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3529.0341782543246,
+            "y": 128.5
+          },
+          "nodeIndex": "UsageMetricsDefinitions",
+          "nodeLineageTag": "e51a53d2-c71f-4e28-9bc7-082337f3497a",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3529.0341782543246,
+            "y": 152.5
+          },
+          "nodeIndex": "UserManagementDefinitions",
+          "nodeLineageTag": "16e18d94-e866-4e73-9ed7-a850bf243944",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3529.0341782543246,
+            "y": 116.5
+          },
+          "nodeIndex": "OrgDotComChat",
+          "nodeLineageTag": "534a25e4-bb8c-4760-a1d6-cdb777cf1f4f",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 3813.0341782543246,
+            "y": 104.5
+          },
+          "nodeIndex": "OrgDotComChatModels",
+          "nodeLineageTag": "aed32787-d7e5-43cd-a63c-4d5beacce8a3",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4097.0341782543246,
+            "y": 92.5
+          },
+          "nodeIndex": "OrgDotComPullRequestSummaries",
+          "nodeLineageTag": "45b314c3-8edd-4b33-8b91-a4b546334037",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4381.0341782543246,
+            "y": 92.5
+          },
+          "nodeIndex": "OrgDotComPullRequestSummariesModels",
+          "nodeLineageTag": "42d03e23-a0c6-47ba-9711-4ff00a52d414",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4665.0341782543246,
+            "y": 128.5
+          },
+          "nodeIndex": "OrgIDEChat",
+          "nodeLineageTag": "efe40b7b-4671-4115-b86d-3e084b5b9928",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 4949.0341782543246,
+            "y": 78.5
+          },
+          "nodeIndex": "OrgIDEChatEditors",
+          "nodeLineageTag": "3c1a561d-1362-4a0d-9630-0b6157160ac8",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5233.0341782543246,
+            "y": 128.5
+          },
+          "nodeIndex": "OrgIDECodeCompletions",
+          "nodeLineageTag": "870a7fa7-2a38-4278-be87-f16376692e7c",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5517.0341782543246,
+            "y": 78.5
+          },
+          "nodeIndex": "OrgIDECodeCompletionsEditors",
+          "nodeLineageTag": "22ebe010-05f4-4780-b1cc-5bb2853b82a3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 568,
+            "y": 5
+          },
+          "nodeIndex": "CopilotOrgSeats",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5517.0341782543246,
+            "y": 152.5
+          },
+          "nodeIndex": "AllOrgUsageData",
+          "nodeLineageTag": "439c0df9-65eb-4b30-adfb-d0f031172bb7",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5801.0341782543246,
+            "y": 78.5
+          },
+          "nodeIndex": "CopilotOrgBilling",
+          "nodeLineageTag": "7dc82d1c-a850-45e1-aad9-f73bf16336fc",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 5801.0341782543246,
+            "y": 0
+          },
+          "nodeIndex": "EnterpriseActiveCommitters",
+          "nodeLineageTag": "03f2d9e7-317a-4c60-b969-1dc2663e5efd",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

@@ -1,5 +1,5 @@
 {
-  "name": "CY23SU04",
+  "name": "CY24SU08",
   "dataColors": [
     "#118DFF",
     "#12239E",
@@ -143,6 +143,11 @@
             "transparency": 0
           }
         ],
+        "border": [
+          {
+            "width": 1
+          }
+        ],
         "outspacePane": [
           {
             "backgroundColor": {
@@ -187,7 +192,8 @@
       "*": {
         "bubbles": [
           {
-            "bubbleSize": -10
+            "bubbleSize": -10,
+            "markerRangeType": "auto"
           }
         ],
         "general": [
@@ -219,6 +225,11 @@
             "backgroundTransparency": 0,
             "gridLineType": "inner"
           }
+        ],
+        "forecast": [
+          {
+            "matchSeriesInterpolation": true
+          }
         ]
       }
     },
@@ -226,7 +237,8 @@
       "*": {
         "bubbles": [
           {
-            "bubbleSize": -10
+            "bubbleSize": -10,
+            "markerRangeType": "auto"
           }
         ]
       }
@@ -280,9 +292,10 @@
     },
     "pivotTable": {
       "*": {
-        "*": [
+        "rowHeaders": [
           {
-            "showExpandCollapseButtons": true
+            "showExpandCollapseButtons": true,
+            "legacyStyleDisabled": true
           }
         ]
       }
@@ -303,6 +316,37 @@
         "trendline": [
           {
             "transparency": 20
+          }
+        ]
+      }
+    },
+    "cardVisual": {
+      "*": {
+        "layout": [
+          {
+            "maxTiles": 3
+          }
+        ],
+        "overflow": [
+          {
+            "type": 0
+          }
+        ],
+        "image": [
+          {
+            "fixedSize": false
+          },
+          {
+            "imageAreaSize": 50
+          }
+        ]
+      }
+    },
+    "advancedSlicerVisual": {
+      "*": {
+        "layout": [
+          {
+            "maxTiles": 3
           }
         ]
       }
@@ -521,6 +565,11 @@
         "general": [
           {
             "responsive": true
+          }
+        ],
+        "valueAxis": [
+          {
+            "show": true
           }
         ]
       }
