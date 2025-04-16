@@ -55930,7 +55930,7 @@
             "source": {
               "expression": [
                 "let",
-                "    RelPath = \"/enterprises/\" & Enterprise & \"/settings/billing/advanced-security\",",
+                "    RelPath = \"/enterprises/\" & Enterprise & \"/settings/billing/advanced-security?advanced_security_product=code_security\",",
                 "    Source = Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"],RelativePath=RelPath])),",
                 "    Transform_toTable = Table.FromRecords({Source}),",
                 "    Add_CustomColumns = Table.AddColumn(Transform_toTable, \"enterprise\", each Enterprise),",
