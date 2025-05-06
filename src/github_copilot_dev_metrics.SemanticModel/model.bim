@@ -12,11 +12,11 @@
       },
       {
         "name": "PBI_QueryOrder",
-        "value": "[\"CopilotEnterpriseStats\",\"CopilotEnterpriseSeats\",\"CopilotEnterpriseOrgsWithSeats\",\"Organizations\",\"GetRepos\",\"GetRepoLanguages\",\"GetCommits\",\"Enterprise\",\"OrganizationList\",\"GetWorkflowRuns\",\"GetTeams\",\"GetIssues\",\"GetPRs\",\"CopilotOrgBilling\",\"CopilotOrgStats\",\"GetComments\",\"CopilotOrgSeats\",\"GetCopilotDetails\",\"CopilotOrgUsage\",\"AllOrgUsageData\",\"GitHubAPI\",\"GetCopilotUniqueOrgBilling\",\"GetCopilotSeats\",\"GetCopilotOrgUsage\",\"ReportDates\",\"UsageMetricsDefinitions\",\"CalculateCustomOrgUrls\",\"Measures_AdoptionOnboarding\",\"Measures_UsageMetrics\",\"EnterpriseLicenses\",\"GetCopilotEnterpriseMetrics\",\"CopilotEnterpriseUsageNewSchema\",\"Integrations\",\"AllUsageData\",\"IDECodeCompletions\",\"IDECodeCompletionsEditors\",\"IDEChat\",\"IDEChatEditors\",\"DotComChat\",\"DotComChatModels\",\"DotComPullRequestSummaries\",\"DotComPullRequestSummariesModels\",\"RangeStart\",\"RangeEnd\",\"UserManagementDefinitions\",\"GetCopilotEnterpriseSeats\",\"OrgIDECodeCompletions\",\"OrgIDECodeCompletionsEditors\",\"OrgIDEChat\",\"OrgIDEChatEditors\",\"OrgDotComChat\",\"OrgDotComChatModels\",\"OrgDotComPullRequestSummaries\",\"OrgDotComPullRequestSummariesModels\",\"EnterpriseActiveCommitters\"]"
+        "value": "[\"CopilotEnterpriseStats\",\"CopilotEnterpriseSeats\",\"CopilotEnterpriseOrgsWithSeats\",\"Organizations\",\"GetRepos\",\"GetRepoLanguages\",\"GetCommits\",\"Enterprise\",\"OrganizationList\",\"GetWorkflowRuns\",\"GetTeams\",\"GetIssues\",\"GetPRs\",\"CopilotOrgBilling\",\"CopilotOrgStats\",\"GetComments\",\"CopilotOrgSeats\",\"GetCopilotDetails\",\"CopilotOrgUsage\",\"AllOrgUsageData\",\"GitHubAPI\",\"GetCopilotUniqueOrgBilling\",\"GetCopilotSeats\",\"GetCopilotOrgUsage\",\"ReportDates\",\"UsageMetricsDefinitions\",\"CalculateCustomOrgUrls\",\"Measures_AdoptionOnboarding\",\"Measures_UsageMetrics\",\"EnterpriseLicenses\",\"GetCopilotEnterpriseMetrics\",\"CopilotEnterpriseUsageNewSchema\",\"Integrations\",\"AllUsageData\",\"IDECodeCompletions\",\"IDECodeCompletionsEditors\",\"IDEChat\",\"IDEChatEditors\",\"DotComChat\",\"DotComChatModels\",\"DotComPullRequestSummaries\",\"DotComPullRequestSummariesModels\",\"RangeStart\",\"RangeEnd\",\"UserManagementDefinitions\",\"GetCopilotEnterpriseSeats\",\"OrgIDECodeCompletions\",\"OrgIDECodeCompletionsEditors\",\"OrgIDEChat\",\"OrgIDEChatEditors\",\"OrgDotComChat\",\"OrgDotComChatModels\",\"OrgDotComPullRequestSummaries\",\"OrgDotComPullRequestSummariesModels\",\"EnterpriseActiveCommitters\",\"GHASStandalone\"]"
       },
       {
         "name": "PBI_ProTooling",
-        "value": "[\"DevMode\"]"
+        "value": "[\"DevMode\",\"DaxQueryView_Desktop\"]"
       }
     ],
     "culture": "en-US",
@@ -45370,39 +45370,39 @@
           }
         ],
         "expression": [
-          "/*(copilotUrl as text) =>",
-          "let",
-          "    Source = List.Generate(()=>",
-          "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=\"1\"]])) otherwise null, PageNumber=1],",
-          "      each [Result]<>null and List.Count([Result][seats]) > 0,",
-          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1)]])) otherwise null, PageNumber=[PageNumber]+1],",
-          "      each [Result]),",
-          "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
-          "in",
-          "#\"Converted to Table\"*/",
-          "",
-          "",
-          "",
-          "(copilotUrl as text) =>",
-          "let",
-          "    EntitiesPerPage = 100,",
-          "",
-          "    GetSeats = (PageIndex)=>",
-          "    let seats = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=Number.ToText(PageIndex)]])) otherwise null",
-          "    in seats,",
-          "",
-          "    GetCount =  ()=>",
-          "    let seats = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl])) otherwise null,",
-          "    seatCount = if seats <> null then seats[total_seats] else 0",
-          "    in seatCount,",
-          "",
-          "    EntityCount = List.Max({ EntitiesPerPage, GetCount() }),",
-          "    PageCount   = Number.RoundUp(EntityCount / EntitiesPerPage),",
-          "    PageIndices = {1..PageCount},",
-          "",
-          "    Pages       = List.Transform(PageIndices, each try GetSeats(_) otherwise null),",
-          "    #\"Converted to Table\" = Table.FromList(Pages, Splitter.SplitByNothing(), null, null, ExtraValues.Error)",
-          "in",
+          "/*(copilotUrl as text) =>\r",
+          "let\r",
+          "    Source = List.Generate(()=>\r",
+          "    [Result = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=\"1\"]])) otherwise null, PageNumber=1],\r",
+          "      each [Result]<>null and List.Count([Result][seats]) > 0,\r",
+          "      each [Result= try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=Number.ToText([PageNumber]+1)]])) otherwise null, PageNumber=[PageNumber]+1],\r",
+          "      each [Result]),\r",
+          "    #\"Converted to Table\" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error)\r",
+          "in\r",
+          "#\"Converted to Table\"*/\r",
+          "\r",
+          "\r",
+          "\r",
+          "(copilotUrl as text) =>\r",
+          "let\r",
+          "    EntitiesPerPage = 100,\r",
+          "\r",
+          "    GetSeats = (PageIndex)=>\r",
+          "    let seats = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl, Query=[per_page=\"100\", page=Number.ToText(PageIndex)]])) otherwise null\r",
+          "    in seats,\r",
+          "\r",
+          "    GetCount =  ()=>\r",
+          "    let seats = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"], RelativePath=copilotUrl])) otherwise null,\r",
+          "    seatCount = if seats <> null then seats[total_seats] else 0\r",
+          "    in seatCount,\r",
+          "\r",
+          "    EntityCount = List.Max({ EntitiesPerPage, GetCount() }),\r",
+          "    PageCount   = Number.RoundUp(EntityCount / EntitiesPerPage),\r",
+          "    PageIndices = {1..PageCount},\r",
+          "\r",
+          "    Pages       = List.Transform(PageIndices, each try GetSeats(_) otherwise null),\r",
+          "    #\"Converted to Table\" = Table.FromList(Pages, Splitter.SplitByNothing(), null, null, ExtraValues.Error)\r",
+          "in\r",
           "    #\"Converted to Table\""
         ],
         "kind": "m",
@@ -45450,7 +45450,7 @@
           }
         ],
         "description": "Your GitHub Enterprise slug",
-        "expression": "\"integrityplus\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
+        "expression": "\"avocado-corp\" meta [IsParameterQuery=true, Type=\"Text\", IsParameterQueryRequired=true]",
         "kind": "m",
         "lineageTag": "4bb4f994-92c8-47aa-b437-af30238832b5",
         "queryGroup": "Parameters"
@@ -45494,13 +45494,13 @@
           }
         ],
         "expression": [
-          "()=>",
-          "let",
-          "    route = \"/enterprises/\" & Enterprise & \"/copilot/metrics\",",
-          "    /*lastRefreshDate = if Table.First(ReportDates) <> null then DateTimeZone.ToText(Table.First(ReportDates)[last_refresh_date],[Format=\"YYYY-MM-DD\"]) else DateTimeZone.ToText(DateTimeZone.UtcNow,[Format=\"YYYY-MM-DD\"]),",
-          "    today = DateTimeZone.ToText(DateTimeZone.FixedLocalNow(),[Format=\"YYYY-MM-DD\"]),*/",
-          "    Source = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"],RelativePath=route])) otherwise null",
-          "in",
+          "()=>\r",
+          "let\r",
+          "    route = \"/enterprises/\" & Enterprise & \"/copilot/metrics\",\r",
+          "    /*lastRefreshDate = if Table.First(ReportDates) <> null then DateTimeZone.ToText(Table.First(ReportDates)[last_refresh_date],[Format=\"YYYY-MM-DD\"]) else DateTimeZone.ToText(DateTimeZone.UtcNow,[Format=\"YYYY-MM-DD\"]),\r",
+          "    today = DateTimeZone.ToText(DateTimeZone.FixedLocalNow(),[Format=\"YYYY-MM-DD\"]),*/\r",
+          "    Source = try Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"],RelativePath=route])) otherwise null\r",
+          "in\r",
           "    Source"
         ],
         "kind": "m",
@@ -45577,16 +45577,34 @@
           }
         ],
         "expression": [
-          "() =>",
-          "let",
-          "    RelPath = \"/enterprises/\" & Enterprise & \"/copilot/billing/seats\",",
-          "    Source = try GetCopilotSeats(RelPath) otherwise null",
-          "in",
+          "() =>\r",
+          "let\r",
+          "    RelPath = \"/enterprises/\" & Enterprise & \"/copilot/billing/seats\",\r",
+          "    Source = try GetCopilotSeats(RelPath) otherwise null\r",
+          "in\r",
           "Source"
         ],
         "kind": "m",
         "lineageTag": "2ca79de9-6eec-40da-9036-8f298af91088",
         "queryGroup": "Functions"
+      },
+      {
+        "name": "GHASStandalone",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Logical"
+          }
+        ],
+        "description": "This parameter is required if you have purchased standalone Code Scanning or Secret Protection products for GitHub Advanced Security",
+        "expression": "true meta [IsParameterQuery=true, Type=\"Logical\", IsParameterQueryRequired=false]",
+        "kind": "m",
+        "lineageTag": "f2b1b871-c150-41aa-aef4-90faad3f378d",
+        "queryGroup": "Parameters"
       }
     ],
     "queryGroups": [
@@ -46119,36 +46137,36 @@
         "toTable": "LocalDateTable_c8d8bc40-82bd-4216-a981-a81e2f747841"
       },
       {
-        "name": "e793926d-45ee-4715-96b7-282bdd6e7e55",
+        "name": "440eed2a-44fd-4682-b9b3-4b53b790d6c9",
         "fromColumn": "usage_records.date",
         "fromTable": "IDECodeCompletions",
         "joinOnDateBehavior": "datePartOnly",
         "toColumn": "Date",
-        "toTable": "LocalDateTable_9a631a78-b44c-4dab-81b7-50db4d1e9095"
+        "toTable": "LocalDateTable_83ae6ebc-b08c-4b42-9c7a-96250e41d567"
       },
       {
-        "name": "a3b929f2-1219-4e04-a563-3c273e659099",
+        "name": "3840d997-7889-4ee1-bd6d-9720c92da98a",
         "fromColumn": "usage_records.date",
         "fromTable": "IDEChat",
         "joinOnDateBehavior": "datePartOnly",
         "toColumn": "Date",
-        "toTable": "LocalDateTable_bb64880c-c1c2-4832-932b-4c59d93201be"
+        "toTable": "LocalDateTable_fd996e7b-87c8-478f-af12-0b1af84167d2"
       },
       {
-        "name": "3e0a71f9-9bb3-4a8c-aeb6-0789bfc785d0",
+        "name": "8526263b-fd0b-44c3-b80d-f9882f59a1ef",
         "fromColumn": "usage_records.date",
         "fromTable": "IDEChatEditors",
         "joinOnDateBehavior": "datePartOnly",
         "toColumn": "Date",
-        "toTable": "LocalDateTable_0d5f382f-28ae-42bf-a322-8ea1c4ec6b0a"
+        "toTable": "LocalDateTable_9f801c52-2560-4b92-9b2c-44c4f43af9a5"
       },
       {
-        "name": "7666efa9-44d7-4bcf-acd4-7d020560ca84",
+        "name": "dcbd43b0-6555-49c7-8373-7130506c62a2",
         "fromColumn": "usage_records.date",
         "fromTable": "DotComPullRequestSummaries",
         "joinOnDateBehavior": "datePartOnly",
         "toColumn": "Date",
-        "toTable": "LocalDateTable_4fb91c4f-cebc-47fa-bbcc-1c1a6b9f0784"
+        "toTable": "LocalDateTable_6479ce11-bcf5-41ae-80e1-aedf1b76a137"
       }
     ],
     "sourceQueryCulture": "en-US",
@@ -48748,10 +48766,10 @@
                 "name": "Variation",
                 "defaultHierarchy": {
                   "hierarchy": "Date Hierarchy",
-                  "table": "LocalDateTable_9a631a78-b44c-4dab-81b7-50db4d1e9095"
+                  "table": "LocalDateTable_83ae6ebc-b08c-4b42-9c7a-96250e41d567"
                 },
                 "isDefault": true,
-                "relationship": "e793926d-45ee-4715-96b7-282bdd6e7e55"
+                "relationship": "440eed2a-44fd-4682-b9b3-4b53b790d6c9"
               }
             ]
           },
@@ -48866,10 +48884,10 @@
                 "name": "Variation",
                 "defaultHierarchy": {
                   "hierarchy": "Date Hierarchy",
-                  "table": "LocalDateTable_bb64880c-c1c2-4832-932b-4c59d93201be"
+                  "table": "LocalDateTable_fd996e7b-87c8-478f-af12-0b1af84167d2"
                 },
                 "isDefault": true,
-                "relationship": "a3b929f2-1219-4e04-a563-3c273e659099"
+                "relationship": "3840d997-7889-4ee1-bd6d-9720c92da98a"
               }
             ]
           },
@@ -49117,10 +49135,10 @@
                 "name": "Variation",
                 "defaultHierarchy": {
                   "hierarchy": "Date Hierarchy",
-                  "table": "LocalDateTable_4fb91c4f-cebc-47fa-bbcc-1c1a6b9f0784"
+                  "table": "LocalDateTable_6479ce11-bcf5-41ae-80e1-aedf1b76a137"
                 },
                 "isDefault": true,
-                "relationship": "7666efa9-44d7-4bcf-acd4-7d020560ca84"
+                "relationship": "dcbd43b0-6555-49c7-8373-7130506c62a2"
               }
             ]
           },
@@ -49586,10 +49604,10 @@
                 "name": "Variation",
                 "defaultHierarchy": {
                   "hierarchy": "Date Hierarchy",
-                  "table": "LocalDateTable_0d5f382f-28ae-42bf-a322-8ea1c4ec6b0a"
+                  "table": "LocalDateTable_9f801c52-2560-4b92-9b2c-44c4f43af9a5"
                 },
                 "isDefault": true,
-                "relationship": "3e0a71f9-9bb3-4a8c-aeb6-0789bfc785d0"
+                "relationship": "8526263b-fd0b-44c3-b80d-f9882f59a1ef"
               }
             ]
           },
@@ -52205,7 +52223,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -52524,7 +52542,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -52989,7 +53007,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -53308,7 +53326,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -53725,7 +53743,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -54059,7 +54077,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -54407,7 +54425,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -54771,7 +54789,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -55546,7 +55564,7 @@
           },
           {
             "name": "PBI_ResultType",
-            "value": "Exception"
+            "value": "Table"
           }
         ],
         "columns": [
@@ -55906,19 +55924,6 @@
             "lineageTag": "670e8ea9-8316-4d68-9193-053c4515c97e",
             "sourceColumn": "enterprise",
             "summarizeBy": "none"
-          },
-          {
-            "name": "purchased_advanced_security_committers",
-            "annotations": [
-              {
-                "name": "SummarizationSetBy",
-                "value": "Automatic"
-              }
-            ],
-            "dataType": "string",
-            "lineageTag": "d11fcd1a-7a39-492d-b831-a8ad31711b33",
-            "sourceColumn": "purchased_advanced_security_committers",
-            "summarizeBy": "none"
           }
         ],
         "lineageTag": "03f2d9e7-317a-4c60-b969-1dc2663e5efd",
@@ -55930,7 +55935,7 @@
             "source": {
               "expression": [
                 "let",
-                "    RelPath = \"/enterprises/\" & Enterprise & \"/settings/billing/advanced-security?advanced_security_product=code_security\",",
+                "    RelPath = if GHASStandalone then \"/enterprises/\" & Enterprise & \"/settings/billing/advanced-security?advanced_security_product=code_security&advanced_security_product=secret_protection\" else \"/enterprises/\" & Enterprise & \"/settings/billing/advanced-security\",",
                 "    Source = Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"],RelativePath=RelPath])),",
                 "    Transform_toTable = Table.FromRecords({Source}),",
                 "    Add_CustomColumns = Table.AddColumn(Transform_toTable, \"enterprise\", each Enterprise),",
@@ -56145,7 +56150,7 @@
         "showAsVariationsOnly": true
       },
       {
-        "name": "LocalDateTable_9a631a78-b44c-4dab-81b7-50db4d1e9095",
+        "name": "LocalDateTable_83ae6ebc-b08c-4b42-9c7a-96250e41d567",
         "annotations": [
           {
             "name": "__PBI_LocalDateTable",
@@ -56165,7 +56170,7 @@
             "dataType": "dateTime",
             "isHidden": true,
             "isNameInferred": true,
-            "lineageTag": "fb5e643e-ab74-4381-b486-fbbb80473b23",
+            "lineageTag": "cfb1c0be-8691-4aaf-ac51-ef4ebe7009db",
             "sourceColumn": "[Date]",
             "summarizeBy": "none",
             "type": "calculatedTableColumn"
@@ -56186,7 +56191,7 @@
             "dataType": "int64",
             "expression": "YEAR([Date])",
             "isHidden": true,
-            "lineageTag": "6067b087-9d38-43cb-8011-89e973d4c91e",
+            "lineageTag": "49a2e35d-7286-4564-9ee3-4379401de748",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56206,7 +56211,7 @@
             "dataType": "int64",
             "expression": "MONTH([Date])",
             "isHidden": true,
-            "lineageTag": "a4fb3df9-3467-40d2-8903-f957f420e80c",
+            "lineageTag": "6ef31ef2-a026-4ce5-ac4f-e4b12a8f4d58",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56226,7 +56231,7 @@
             "dataType": "string",
             "expression": "FORMAT([Date], \"MMMM\")",
             "isHidden": true,
-            "lineageTag": "55e0d79b-8fd2-47fb-9c8b-216bef7244d8",
+            "lineageTag": "729910e7-b568-4957-ab64-a21c55724450",
             "sortByColumn": "MonthNo",
             "summarizeBy": "none",
             "type": "calculated"
@@ -56247,7 +56252,7 @@
             "dataType": "int64",
             "expression": "INT(([MonthNo] + 2) / 3)",
             "isHidden": true,
-            "lineageTag": "32abe3c8-d974-4e58-9f8d-c95de8055f21",
+            "lineageTag": "0305bed2-4630-4ae4-a32c-6be22a82f1b4",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56267,7 +56272,7 @@
             "dataType": "string",
             "expression": "\"Qtr \" & [QuarterNo]",
             "isHidden": true,
-            "lineageTag": "e407ea11-8eda-48d6-b6cc-56bb51f484e1",
+            "lineageTag": "d69cd237-6ab1-4a6c-ab5a-8421d9c8fae3",
             "sortByColumn": "QuarterNo",
             "summarizeBy": "none",
             "type": "calculated"
@@ -56288,7 +56293,7 @@
             "dataType": "int64",
             "expression": "DAY([Date])",
             "isHidden": true,
-            "lineageTag": "43763c1d-23ab-4633-8b3f-640e8f06c238",
+            "lineageTag": "6cdb91ae-2162-4693-b8f8-5d52fefc6af1",
             "summarizeBy": "none",
             "type": "calculated"
           }
@@ -56306,36 +56311,36 @@
               {
                 "name": "Year",
                 "column": "Year",
-                "lineageTag": "cb89c97b-59c9-4ae2-a60d-cc610edeafaa",
+                "lineageTag": "d2e75018-a448-4f3f-a4c0-8fc3e9a65d25",
                 "ordinal": 0
               },
               {
                 "name": "Quarter",
                 "column": "Quarter",
-                "lineageTag": "b7e2ac14-70a4-4d48-9796-5dc065d6990c",
+                "lineageTag": "742c7177-28d0-44a0-be5f-2e0872d12dff",
                 "ordinal": 1
               },
               {
                 "name": "Month",
                 "column": "Month",
-                "lineageTag": "f8758dfb-69ae-46a9-ba10-02df2f27ef94",
+                "lineageTag": "2755b63d-0490-4afa-aa8b-1e2f9359f340",
                 "ordinal": 2
               },
               {
                 "name": "Day",
                 "column": "Day",
-                "lineageTag": "6a6bb46d-5dfb-4d75-9d1a-d6c2ce7af6c1",
+                "lineageTag": "83bfcd50-b91d-4776-bc33-6f5e6d14a089",
                 "ordinal": 3
               }
             ],
-            "lineageTag": "33e77edf-1803-4257-b160-ff1e5ac6048c"
+            "lineageTag": "dd361ac5-3e2a-465a-86e7-047a53df46a7"
           }
         ],
         "isHidden": true,
-        "lineageTag": "12c68136-3752-4b4a-82d1-dd8505e0943b",
+        "lineageTag": "80f20e78-1f74-4608-825a-68e34254217c",
         "partitions": [
           {
-            "name": "LocalDateTable_9a631a78-b44c-4dab-81b7-50db4d1e9095",
+            "name": "LocalDateTable_83ae6ebc-b08c-4b42-9c7a-96250e41d567",
             "mode": "import",
             "source": {
               "expression": "Calendar(Date(Year(MIN('IDECodeCompletions'[usage_records.date])), 1, 1), Date(Year(MAX('IDECodeCompletions'[usage_records.date])), 12, 31))",
@@ -56346,7 +56351,7 @@
         "showAsVariationsOnly": true
       },
       {
-        "name": "LocalDateTable_bb64880c-c1c2-4832-932b-4c59d93201be",
+        "name": "LocalDateTable_fd996e7b-87c8-478f-af12-0b1af84167d2",
         "annotations": [
           {
             "name": "__PBI_LocalDateTable",
@@ -56366,7 +56371,7 @@
             "dataType": "dateTime",
             "isHidden": true,
             "isNameInferred": true,
-            "lineageTag": "6bed5a25-34e1-471c-9f02-80e2836f2d07",
+            "lineageTag": "eef32bee-5844-4b89-8aca-93ec1c36e1f1",
             "sourceColumn": "[Date]",
             "summarizeBy": "none",
             "type": "calculatedTableColumn"
@@ -56387,7 +56392,7 @@
             "dataType": "int64",
             "expression": "YEAR([Date])",
             "isHidden": true,
-            "lineageTag": "7433a522-178b-480d-bc51-ddb107c4f736",
+            "lineageTag": "1f8c404c-844f-4154-9536-7b7ea6c4cc31",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56407,7 +56412,7 @@
             "dataType": "int64",
             "expression": "MONTH([Date])",
             "isHidden": true,
-            "lineageTag": "797839a2-4c31-45b8-9e3f-e1106b171887",
+            "lineageTag": "2ffe1ff4-25f4-45eb-9e21-937d86b01dfe",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56427,7 +56432,7 @@
             "dataType": "string",
             "expression": "FORMAT([Date], \"MMMM\")",
             "isHidden": true,
-            "lineageTag": "1c1b58f6-3da0-459c-b1f8-074f125b68ec",
+            "lineageTag": "16fb26bd-8362-44cb-b32d-6aed7a8e7e11",
             "sortByColumn": "MonthNo",
             "summarizeBy": "none",
             "type": "calculated"
@@ -56448,7 +56453,7 @@
             "dataType": "int64",
             "expression": "INT(([MonthNo] + 2) / 3)",
             "isHidden": true,
-            "lineageTag": "67d14b56-b4f7-4c92-b5a9-25d1e8fd6741",
+            "lineageTag": "2a97e746-0015-49b7-806f-f07a1c8f939c",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56468,7 +56473,7 @@
             "dataType": "string",
             "expression": "\"Qtr \" & [QuarterNo]",
             "isHidden": true,
-            "lineageTag": "1b31f656-f312-4af8-ad05-9ab8e284ec0f",
+            "lineageTag": "80d72b86-2559-4ce3-9963-dbd77fbcfc56",
             "sortByColumn": "QuarterNo",
             "summarizeBy": "none",
             "type": "calculated"
@@ -56489,7 +56494,7 @@
             "dataType": "int64",
             "expression": "DAY([Date])",
             "isHidden": true,
-            "lineageTag": "1bf609ec-2481-4a8b-b761-dea074c29422",
+            "lineageTag": "bcc0cf36-2f58-4f98-9f35-d2e09c4dc5a2",
             "summarizeBy": "none",
             "type": "calculated"
           }
@@ -56507,36 +56512,36 @@
               {
                 "name": "Year",
                 "column": "Year",
-                "lineageTag": "b60f061e-b975-4adc-87f8-514c5f6bb3fd",
+                "lineageTag": "73dd1c39-a70b-4112-a7dc-da5c5eba0d0c",
                 "ordinal": 0
               },
               {
                 "name": "Quarter",
                 "column": "Quarter",
-                "lineageTag": "dd52cf16-e72a-4fce-a159-ba0c0a5c2c00",
+                "lineageTag": "75b052be-aea9-484b-aeae-36efceeaceba",
                 "ordinal": 1
               },
               {
                 "name": "Month",
                 "column": "Month",
-                "lineageTag": "5cb24847-f0c2-4023-b590-6a8f03d1b6c5",
+                "lineageTag": "fd22a8d0-fa90-453c-8562-d59c5731b65d",
                 "ordinal": 2
               },
               {
                 "name": "Day",
                 "column": "Day",
-                "lineageTag": "118fbbdc-d6cc-498e-90ca-adccdb5e99f7",
+                "lineageTag": "b9dc243a-bea3-4a09-9b9f-e6bc0430efaf",
                 "ordinal": 3
               }
             ],
-            "lineageTag": "a488362b-7ad8-4fdd-a8e7-3b023cbe66f9"
+            "lineageTag": "86093d17-745c-44f7-8e73-f12e27d53b95"
           }
         ],
         "isHidden": true,
-        "lineageTag": "974d3733-1042-4df5-b02a-afcd86ddd9a1",
+        "lineageTag": "a7bf209d-47c5-431f-9c07-582392c73e46",
         "partitions": [
           {
-            "name": "LocalDateTable_bb64880c-c1c2-4832-932b-4c59d93201be",
+            "name": "LocalDateTable_fd996e7b-87c8-478f-af12-0b1af84167d2",
             "mode": "import",
             "source": {
               "expression": "Calendar(Date(Year(MIN('IDEChat'[usage_records.date])), 1, 1), Date(Year(MAX('IDEChat'[usage_records.date])), 12, 31))",
@@ -56547,7 +56552,7 @@
         "showAsVariationsOnly": true
       },
       {
-        "name": "LocalDateTable_0d5f382f-28ae-42bf-a322-8ea1c4ec6b0a",
+        "name": "LocalDateTable_9f801c52-2560-4b92-9b2c-44c4f43af9a5",
         "annotations": [
           {
             "name": "__PBI_LocalDateTable",
@@ -56567,7 +56572,7 @@
             "dataType": "dateTime",
             "isHidden": true,
             "isNameInferred": true,
-            "lineageTag": "32203c8e-b186-4d48-a7f8-3341bbb289ca",
+            "lineageTag": "34ef8713-14b0-4917-808f-6d7416d4add4",
             "sourceColumn": "[Date]",
             "summarizeBy": "none",
             "type": "calculatedTableColumn"
@@ -56588,7 +56593,7 @@
             "dataType": "int64",
             "expression": "YEAR([Date])",
             "isHidden": true,
-            "lineageTag": "74a0dea0-ae81-4675-8f9e-ddd5108d51de",
+            "lineageTag": "24bad86a-3c87-4f12-867c-501deed02f50",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56608,7 +56613,7 @@
             "dataType": "int64",
             "expression": "MONTH([Date])",
             "isHidden": true,
-            "lineageTag": "49263e1b-f2cb-4ca3-a371-e744b5a74029",
+            "lineageTag": "a3eb95cc-29f5-441a-954b-9b261d767b56",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56628,7 +56633,7 @@
             "dataType": "string",
             "expression": "FORMAT([Date], \"MMMM\")",
             "isHidden": true,
-            "lineageTag": "07dd63b7-599e-4654-ac40-d60edd258acb",
+            "lineageTag": "a28f20a4-fe75-49e4-b81e-c0791d15f868",
             "sortByColumn": "MonthNo",
             "summarizeBy": "none",
             "type": "calculated"
@@ -56649,7 +56654,7 @@
             "dataType": "int64",
             "expression": "INT(([MonthNo] + 2) / 3)",
             "isHidden": true,
-            "lineageTag": "35a21400-1d5d-40d9-bfad-6dc451dd450b",
+            "lineageTag": "29c62b2f-5068-44ea-8b83-b6880cdbf31c",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56669,7 +56674,7 @@
             "dataType": "string",
             "expression": "\"Qtr \" & [QuarterNo]",
             "isHidden": true,
-            "lineageTag": "410b8f96-93a1-4957-ae82-16394be4a7f7",
+            "lineageTag": "3b9e7169-5ea5-47cf-acf8-4fb5fbfe3c57",
             "sortByColumn": "QuarterNo",
             "summarizeBy": "none",
             "type": "calculated"
@@ -56690,7 +56695,7 @@
             "dataType": "int64",
             "expression": "DAY([Date])",
             "isHidden": true,
-            "lineageTag": "12a900cd-bef2-4226-b735-3c2aeabf95e3",
+            "lineageTag": "5df3db89-ad75-4a26-84ae-afab3e2d8677",
             "summarizeBy": "none",
             "type": "calculated"
           }
@@ -56708,36 +56713,36 @@
               {
                 "name": "Year",
                 "column": "Year",
-                "lineageTag": "598c3d5e-2878-4654-808d-6fab2dee2ef8",
+                "lineageTag": "948d4917-bbc7-4665-aa0e-4aaad37411aa",
                 "ordinal": 0
               },
               {
                 "name": "Quarter",
                 "column": "Quarter",
-                "lineageTag": "77b206f7-a77a-474c-a550-3156d95f57da",
+                "lineageTag": "3bd3d3c1-de75-4ce4-8147-7191f523d763",
                 "ordinal": 1
               },
               {
                 "name": "Month",
                 "column": "Month",
-                "lineageTag": "c35d55ed-927c-4209-9a8f-51053d479ce0",
+                "lineageTag": "fe187547-01f0-4dfe-bf3a-2ce46c88c4d3",
                 "ordinal": 2
               },
               {
                 "name": "Day",
                 "column": "Day",
-                "lineageTag": "502d1200-268e-45d3-8097-f2a9ebf9b30a",
+                "lineageTag": "e67241ba-9951-4f8e-86a9-a5db28859d55",
                 "ordinal": 3
               }
             ],
-            "lineageTag": "54878afe-f4f4-498f-bcfa-47cee3b94c39"
+            "lineageTag": "53013443-b8cb-4eca-8ee4-4c4a9417af73"
           }
         ],
         "isHidden": true,
-        "lineageTag": "c5f30291-91dc-4851-9c3f-fc7d675edeff",
+        "lineageTag": "e26dbc78-a777-4732-a9c9-ce4e03545f2a",
         "partitions": [
           {
-            "name": "LocalDateTable_0d5f382f-28ae-42bf-a322-8ea1c4ec6b0a",
+            "name": "LocalDateTable_9f801c52-2560-4b92-9b2c-44c4f43af9a5",
             "mode": "import",
             "source": {
               "expression": "Calendar(Date(Year(MIN('IDEChatEditors'[usage_records.date])), 1, 1), Date(Year(MAX('IDEChatEditors'[usage_records.date])), 12, 31))",
@@ -56748,7 +56753,7 @@
         "showAsVariationsOnly": true
       },
       {
-        "name": "LocalDateTable_4fb91c4f-cebc-47fa-bbcc-1c1a6b9f0784",
+        "name": "LocalDateTable_6479ce11-bcf5-41ae-80e1-aedf1b76a137",
         "annotations": [
           {
             "name": "__PBI_LocalDateTable",
@@ -56768,7 +56773,7 @@
             "dataType": "dateTime",
             "isHidden": true,
             "isNameInferred": true,
-            "lineageTag": "30e9dc35-d4fd-4726-b8cb-8513a4ae1261",
+            "lineageTag": "c7d13d2f-2639-4085-806a-f8589b017cf5",
             "sourceColumn": "[Date]",
             "summarizeBy": "none",
             "type": "calculatedTableColumn"
@@ -56789,7 +56794,7 @@
             "dataType": "int64",
             "expression": "YEAR([Date])",
             "isHidden": true,
-            "lineageTag": "377c07ae-f82d-41cb-9cf7-f1bfccc797a1",
+            "lineageTag": "e54510b1-d556-41df-b57d-723f39bf4d30",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56809,7 +56814,7 @@
             "dataType": "int64",
             "expression": "MONTH([Date])",
             "isHidden": true,
-            "lineageTag": "a830a092-5698-4e56-8493-1cbbae4d56ab",
+            "lineageTag": "1fd87c18-8145-4c74-b829-ee71e0608cb1",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56829,7 +56834,7 @@
             "dataType": "string",
             "expression": "FORMAT([Date], \"MMMM\")",
             "isHidden": true,
-            "lineageTag": "08f6a6b7-76b4-4b57-96a9-1066f945cc2e",
+            "lineageTag": "843099d2-6e05-4393-bf3d-9b42490f7bc6",
             "sortByColumn": "MonthNo",
             "summarizeBy": "none",
             "type": "calculated"
@@ -56850,7 +56855,7 @@
             "dataType": "int64",
             "expression": "INT(([MonthNo] + 2) / 3)",
             "isHidden": true,
-            "lineageTag": "80441ffa-5433-4b1d-ab96-47be177586cf",
+            "lineageTag": "06996cba-ade1-4c44-8a82-1669cd148cc7",
             "summarizeBy": "none",
             "type": "calculated"
           },
@@ -56870,7 +56875,7 @@
             "dataType": "string",
             "expression": "\"Qtr \" & [QuarterNo]",
             "isHidden": true,
-            "lineageTag": "f6442a2a-fc33-4861-84f0-8d1a2b29a3b3",
+            "lineageTag": "82b41ef9-d506-4035-8ba1-3944c0d2de75",
             "sortByColumn": "QuarterNo",
             "summarizeBy": "none",
             "type": "calculated"
@@ -56891,7 +56896,7 @@
             "dataType": "int64",
             "expression": "DAY([Date])",
             "isHidden": true,
-            "lineageTag": "d5676e5d-0c10-4878-9a21-f370ca1c097a",
+            "lineageTag": "8593fd40-42ec-4b2b-9c10-7e3725cccf53",
             "summarizeBy": "none",
             "type": "calculated"
           }
@@ -56909,36 +56914,36 @@
               {
                 "name": "Year",
                 "column": "Year",
-                "lineageTag": "c308874b-d50c-4c9a-9000-15ebc4c8e80b",
+                "lineageTag": "1376d677-d916-4b17-8e8b-983c702cc573",
                 "ordinal": 0
               },
               {
                 "name": "Quarter",
                 "column": "Quarter",
-                "lineageTag": "5e5bce61-2623-40fa-8b6f-126371f25b06",
+                "lineageTag": "0182b247-77e4-4271-a30c-41ffc2da40c3",
                 "ordinal": 1
               },
               {
                 "name": "Month",
                 "column": "Month",
-                "lineageTag": "3d1c69b4-59b1-40a5-b804-ff5887ff498e",
+                "lineageTag": "76893dde-5aaa-44f1-9825-544de9d9bca2",
                 "ordinal": 2
               },
               {
                 "name": "Day",
                 "column": "Day",
-                "lineageTag": "a9aa558c-fbf5-4ecf-8125-c042dfcc3b24",
+                "lineageTag": "677dd01e-95a3-42e7-b960-c7f6e745e102",
                 "ordinal": 3
               }
             ],
-            "lineageTag": "76d41fe2-7dd8-44de-82a3-9d49728fbf69"
+            "lineageTag": "1841829d-fe76-4f72-8a0c-f19cc86e9e6b"
           }
         ],
         "isHidden": true,
-        "lineageTag": "d68ac4d0-b594-4c17-8cb6-f01194018504",
+        "lineageTag": "f98135fe-cb09-48df-808a-d988ec82802f",
         "partitions": [
           {
-            "name": "LocalDateTable_4fb91c4f-cebc-47fa-bbcc-1c1a6b9f0784",
+            "name": "LocalDateTable_6479ce11-bcf5-41ae-80e1-aedf1b76a137",
             "mode": "import",
             "source": {
               "expression": "Calendar(Date(Year(MIN('DotComPullRequestSummaries'[usage_records.date])), 1, 1), Date(Year(MAX('DotComPullRequestSummaries'[usage_records.date])), 12, 31))",
