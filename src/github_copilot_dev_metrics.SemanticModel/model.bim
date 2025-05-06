@@ -12,8 +12,7 @@
       },
       {
         "name": "PBI_QueryOrder",
-        "value": "[\"CopilotEnterpriseStats\",\"CopilotEnterpriseSeats\",\"CopilotEnterpriseOrgsWithSeats\",\"Organizations\",\"GetRepos\",\"GetRepoLanguages\",\"GetCommits\",\"Enterprise\",\"OrganizationList\",\"GetWorkflowRuns\",\"GetTeams\",\"GetIssues\",\"GetPRs\",\"CopilotOrgBilling\",\"CopilotOrgStats\",\"GetComments\",\"CopilotOrgSeats\",\"GetCopilotDetails\",\"CopilotOrgUsage\",\"AllOrgUsageData\",\"GitHubAPI\",\"GetCopilotUniqueOrgBilling\",\"GetCopilotSeats\",\"GetCopilotOrgUsage\",\"ReportDates\",\"UsageMetricsDefinitions\",\"CalculateCustomOrgUrls\",\"Measures_AdoptionOnboarding\",\"Measures_UsageMetrics\",\"EnterpriseLicenses\",\"GetCopilotEnterpriseMetrics\",\"CopilotEnterpriseUsageNewSchema\",\"Integrations\",\"AllUsageData\",\"IDECodeCompletions\",\"IDECodeCompletionsEditors\",\"IDEChat\",\"IDEChatEditors\",\"DotComChat\",\"DotComChatModels\",\"DotComPullRequestSummaries\",\"DotComPullRequestSummariesModels\",\"RangeStart\",\"RangeEnd\",\"UserManagementDefinitions\",\"GetCopilotEnterpriseSeats\",\"OrgIDECodeCompletions\",\"OrgIDECodeCompletionsEditors\",\"OrgIDEChat\",\"OrgIDEChatEditors\",\"OrgDotComChat\",\"OrgDotComChatModels\",\"OrgDotComPullRequestSummaries\",\"OrgDotComPullRequestSummariesModels\",\"EnterpriseActiveCommitters\"]"
-      },
+"value": "[\"CopilotEnterpriseStats\",\"CopilotEnterpriseSeats\",\"CopilotEnterpriseOrgsWithSeats\",\"Organizations\",\"GetRepos\",\"GetRepoLanguages\",\"GetCommits\",\"Enterprise\",\"OrganizationList\",\"GetWorkflowRuns\",\"GetTeams\",\"GetIssues\",\"GetPRs\",\"CopilotOrgBilling\",\"CopilotOrgStats\",\"GetComments\",\"CopilotOrgSeats\",\"GetCopilotDetails\",\"CopilotOrgUsage\",\"AllOrgUsageData\",\"GitHubAPI\",\"GetCopilotUniqueOrgBilling\",\"GetCopilotSeats\",\"GetCopilotOrgUsage\",\"ReportDates\",\"UsageMetricsDefinitions\",\"CalculateCustomOrgUrls\",\"Measures_AdoptionOnboarding\",\"Measures_UsageMetrics\",\"EnterpriseLicenses\",\"GetCopilotEnterpriseMetrics\",\"CopilotEnterpriseUsageNewSchema\",\"Integrations\",\"AllUsageData\",\"IDECodeCompletions\",\"IDECodeCompletionsEditors\",\"IDEChat\",\"IDEChatEditors\",\"DotComChat\",\"DotComChatModels\",\"DotComPullRequestSummaries\",\"DotComPullRequestSummariesModels\",\"RangeStart\",\"RangeEnd\",\"UserManagementDefinitions\",\"GetCopilotEnterpriseSeats\",\"OrgIDECodeCompletions\",\"OrgIDECodeCompletionsEditors\",\"OrgIDEChat\",\"OrgIDEChatEditors\",\"OrgDotComChat\",\"OrgDotComChatModels\",\"OrgDotComPullRequestSummaries\",\"OrgDotComPullRequestSummariesModels\",\"EnterpriseActiveCommitters\",\"GHASStandalone\"]"      },
       {
         "name": "PBI_ProTooling",
         "value": "[\"DevMode\"]"
@@ -45587,6 +45586,24 @@
         "kind": "m",
         "lineageTag": "2ca79de9-6eec-40da-9036-8f298af91088",
         "queryGroup": "Functions"
+      },
+      {
+        "name": "GHASStandalone",
+        "annotations": [
+          {
+            "name": "PBI_NavigationStepName",
+            "value": "Navigation"
+          },
+          {
+            "name": "PBI_ResultType",
+            "value": "Logical"
+          }
+        ],
+        "description": "This parameter is required if you have purchased standalone Code Scanning or Secret Protection products for GitHub Advanced Security",
+        "expression": "true meta [IsParameterQuery=true, Type=\"Logical\", IsParameterQueryRequired=false]",
+        "kind": "m",
+        "lineageTag": "f2b1b871-c150-41aa-aef4-90faad3f378d",
+        "queryGroup": "Parameters"
       }
     ],
     "queryGroups": [
@@ -55930,7 +55947,7 @@
             "source": {
               "expression": [
                 "let",
-                "    RelPath = \"/enterprises/\" & Enterprise & \"/settings/billing/advanced-security?advanced_security_product=code_security\",",
+                "    RelPath = if GHASStandalone then \"/enterprises/\" & Enterprise & \"/settings/billing/advanced-security?advanced_security_product=code_security&advanced_security_product=secret_protection\" else \"/enterprises/\" & Enterprise & \"/settings/billing/advanced-security\",",
                 "    Source = Json.Document(Web.Contents(GitHubAPI, [Headers=[Accept=\"application/vnd.github+json\"],RelativePath=RelPath])),",
                 "    Transform_toTable = Table.FromRecords({Source}),",
                 "    Add_CustomColumns = Table.AddColumn(Transform_toTable, \"enterprise\", each Enterprise),",
